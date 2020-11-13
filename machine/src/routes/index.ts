@@ -11,14 +11,6 @@ router.get("/", function(req, res, next) {
   res.json(DatabaseHandler.getDbInstance().getAll())
 });
 
-// router.get("/new/:id", function(req, res, next){
-//   let machine: MachineInstance = new MachineInstance(req.params.id || "Machine");
-//   machine.machineData.savetyDoor.locked = true;
-//   machine.powerOn();
-//   machine.setMachineMode(OperationMode.automatic);
-//   res.send(machine.startAutomatedWorkflow());
-// });
-
 router.get("/info", (req, res, next) => {
   res.json([
     {

@@ -53,4 +53,21 @@ router.get("/operation/:machineId/:name", function(req, res, next){
 
 });
 
+router.post("/variable/:machineId", function(req, res, next){
+
+    const machine = machines.find(item => item.id == req.params.machineId);
+
+    if(machine == undefined) res.json("Machine was not found.");
+
+    const newState = req.body.data;
+
+    if(newState == undefined) res.json("Machine state was not provided!");
+
+    //TODO
+    if(newState != undefined && machine != undefined) DatabaseHandler.getDbInstance().update(machine.id, machine.machineData = newState);
+    
+    res.json("State changed successfully.");
+
+});
+
 export default router;
