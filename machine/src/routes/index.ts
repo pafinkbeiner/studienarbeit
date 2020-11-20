@@ -19,11 +19,6 @@ router.get("/info", (req, res, next) => {
       function: "Returns the whole information from the database."
     },
     {
-      route: "/new/:id",
-      name: "New Machine Route",
-      function: "Creates a new Machine with the specified name."
-    },
-    {
       route: "/logs",
       name: "Log File Route",
       function: "Return the whole collection of log files."
