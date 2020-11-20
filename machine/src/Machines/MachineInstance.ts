@@ -43,6 +43,21 @@ export class MachineInstance implements MachineTemplate{
         this.persistData();
     }
 
+    changeState(key: string, value: string){
+        switch(key){
+            case 'name': this.machineData.name = value; break;
+            case 'operation.power': this.machineData.operation.power = value == 'true' ? true : false; break;
+            case 'savetyDoor.locked': this.machineData.savetyDoor.locked = value == 'true' ? true : false; break;
+            case 'operation.operationMode': 
+                if(value == 'automatic') this.machineData.operation.operationMode = OperationMode.automatic;
+                else if(value == 'semiautomatic') this.machineData.operation.operationMode = OperationMode.semiAutomatic;
+                else if(value == 'stopped') this.machineData.operation.operationMode = OperationMode.stopped;
+            break;
+            default: console.log("Variable not found!");
+        }
+
+    }
+
     // Function to check if the value change of property machineData is valid
     checkConstraints(){
         return true;

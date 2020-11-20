@@ -12,6 +12,17 @@ router.get("/", function(req, res, next) {
   res.json(DatabaseHandler.getDbInstance().getAll())
 });
 
+router.get("/get/:machineId", (req, res, next) => {
+
+    const machine: MachineInstance = DatabaseHandler.getDbInstance().get(req.params.machineId);
+    if(machine != undefined){
+        res.json(machine)
+    }else{
+        res.json("No machine found!");
+    }
+
+});
+
 router.get("/new/:name", function(req, res, next){
   let machine: MachineInstance = new MachineInstance(req.params.name);
   machines.push(machine);
@@ -53,19 +64,22 @@ router.get("/operation/:machineId/:name", function(req, res, next){
 
 });
 
-router.post("/variable/:machineId", function(req, res, next){
+router.get("/variable/:machineId/:name/:newValue", function(req, res, next){
 
     const machine = machines.find(item => item.id == req.params.machineId);
 
     if(machine == undefined) res.json("Machine was not found.");
 
-    const newState = req.body.data;
+    // console.log(req.body)
 
-    if(newState == undefined) res.json("Machine state was not provided!");
+    // const newState = req.body;
 
-    //TODO
-    if(newState != undefined && machine != undefined) DatabaseHandler.getDbInstance().update(machine.id, machine.machineData = newState);
-    
+    machine?.changeState(req.params.name, req.params.newValue);
+
+    // if(newState == undefined) res.json("Machine state was not provided!");
+
+    // if(newState != undefined && machine != undefined) DatabaseHandler.getDbInstance().update(machine.id, newState);
+
     res.json("State changed successfully.");
 
 });

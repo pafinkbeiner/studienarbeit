@@ -20,29 +20,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = __importStar(require("express"));
-var Database_1 = require("../Helper/Database");
+var Log_1 = require("../Helper/Log");
 var router = express.Router();
 /* GET home page. */
 router.get("/", function (req, res, next) {
-    res.json(Database_1.DatabaseHandler.getDbInstance().getAll());
-});
-router.get("/info", function (req, res, next) {
-    res.json([
-        {
-            route: "/",
-            name: "Standard Route",
-            function: "Returns the whole information from the database."
-        },
-        {
-            route: "/logs",
-            name: "Log File Route",
-            function: "Return the whole collection of log files."
-        },
-        {
-            route: "/machines",
-            name: "Machine Route",
-            function: "Make Requests to the Machines."
-        }
-    ]);
+    res.json(Log_1.LogHandler.getLogInstance().getAll());
 });
 exports.default = router;

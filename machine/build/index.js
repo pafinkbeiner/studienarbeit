@@ -8,6 +8,8 @@ var dotenv_1 = __importDefault(require("dotenv"));
 var express_1 = __importDefault(require("express"));
 var path_1 = __importDefault(require("path"));
 var index_1 = __importDefault(require("./routes/index"));
+var logs_1 = __importDefault(require("./routes/logs"));
+var machines_1 = __importDefault(require("./routes/machines"));
 var createError = require("http-errors");
 // initialize configuration
 dotenv_1.default.config();
@@ -23,6 +25,8 @@ app.use(cookie_parser_1.default());
 app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 // Configure routes
 app.use("/", index_1.default);
+app.use("/logs", logs_1.default);
+app.use("/machines", machines_1.default);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) { return next(createError(404)); });
 // error handler
