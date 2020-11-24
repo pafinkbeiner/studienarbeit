@@ -148,6 +148,28 @@ var MachineInstance = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    MachineInstance.prototype.changeState = function (key, value) {
+        switch (key) {
+            case 'name':
+                this.machineData.name = value;
+                break;
+            case 'operation.power':
+                this.machineData.operation.power = value == 'true' ? true : false;
+                break;
+            case 'savetyDoor.locked':
+                this.machineData.savetyDoor.locked = value == 'true' ? true : false;
+                break;
+            case 'operation.operationMode':
+                if (value == 'automatic')
+                    this.machineData.operation.operationMode = Machine_1.OperationMode.automatic;
+                else if (value == 'semiautomatic')
+                    this.machineData.operation.operationMode = Machine_1.OperationMode.semiAutomatic;
+                else if (value == 'stopped')
+                    this.machineData.operation.operationMode = Machine_1.OperationMode.stopped;
+                break;
+            default: console.log("Variable not found!");
+        }
+    };
     // Function to check if the value change of property machineData is valid
     MachineInstance.prototype.checkConstraints = function () {
         return true;
