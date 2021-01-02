@@ -64,18 +64,18 @@ export interface Position{
     x?: number;
     y?: number;
     z?: number;
-    min: 0;
+    min: number;
     max:number;
 }
 
 export interface Level{
     level: number;
-    maxLevel: 100;
-    minLevel: 0;
+    maxLevel: number;
+    minLevel: number;
 }
 
 export interface Force{
     force: number;
     maxForce: number;
-    minForce: 0;
+    minForce: number;
 }

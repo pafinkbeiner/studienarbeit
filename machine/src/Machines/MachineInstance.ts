@@ -55,18 +55,18 @@ export class MachineInstance implements MachineTemplate{
                 else if(value == 'stopped') this.machineData.operation.operationMode = OperationMode.stopped;
             break;
             /* machine Details */
-            case 'machineDetails.model': break;
-            case 'machineDetails.serialNumber': break;
-            case 'machineDetails.sparDistance': break;
-            case 'machineDetails.maxClosingForce': break;
+            case 'machineDetails.model': this.machineData.machineDetails.model = value; break;
+            case 'machineDetails.serialNumber': this.machineData.machineDetails.serialNumber = Number.parseInt( value ); break;
+            case 'machineDetails.sparDistance': this.machineData.machineDetails.sparDistance = Number.parseInt( value ); break;
+            case 'machineDetails.maxClosingForce': this.machineData.machineDetails.maxClosingForce = Number.parseInt( value ) ;break;
             /* Injection Unit */
-            case 'injectionUnit.position.max': break;
-            case 'injectionUnit.position.min': break;
-            case 'injectionUnit.position.x': break;
-            case 'injectionUnit.fillingLevel.level': break;
-            case 'injectionUnit.fillingLevel.minLevel': break;
-            case 'injectionUnit.fillingLevel.maxLevel': break;
-            case 'injectionUnit.windowLocked': break;
+            case 'injectionUnit.position.max': this.machineData.injectionUnit.position.max = Number.parseInt( value ); break;               
+            case 'injectionUnit.position.min': this.machineData.injectionUnit.position.min = Number.parseInt( value ); break;
+            case 'injectionUnit.position.x': this.machineData.injectionUnit.position.x = Number.parseInt( value ); break;
+            case 'injectionUnit.fillingLevel.level': this.machineData.injectionUnit.fillingLevel.level =  Number.parseInt( value ); break;
+            case 'injectionUnit.fillingLevel.minLevel': this.machineData.injectionUnit.fillingLevel.minLevel =  Number.parseInt( value ); break;
+            case 'injectionUnit.fillingLevel.maxLevel': this.machineData.injectionUnit.fillingLevel.maxLevel =  Number.parseInt( value ); break;
+            case 'injectionUnit.windowLocked': this.machineData.injectionUnit.windowLocked = (value == "true") ? true : false ; break;
             /* Savety Door */
             case 'savetyDoor.position.max': break;
             case 'savetyDoor.position.min': break;
