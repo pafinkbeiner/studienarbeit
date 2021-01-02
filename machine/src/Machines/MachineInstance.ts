@@ -45,6 +45,7 @@ export class MachineInstance implements MachineTemplate{
 
     changeState(key: string, value: string){
         switch(key){
+            /* Essentials */
             case 'name': this.machineData.name = value; break;
             case 'operation.power': this.machineData.operation.power = value == 'true' ? true : false; break;
             case 'savetyDoor.locked': this.machineData.savetyDoor.locked = value == 'true' ? true : false; break;
@@ -53,6 +54,39 @@ export class MachineInstance implements MachineTemplate{
                 else if(value == 'semiautomatic') this.machineData.operation.operationMode = OperationMode.semiAutomatic;
                 else if(value == 'stopped') this.machineData.operation.operationMode = OperationMode.stopped;
             break;
+            /* machine Details */
+            case 'machineDetails.model': break;
+            case 'machineDetails.serialNumber': break;
+            case 'machineDetails.sparDistance': break;
+            case 'machineDetails.maxClosingForce': break;
+            /* Injection Unit */
+            case 'injectionUnit.position.max': break;
+            case 'injectionUnit.position.min': break;
+            case 'injectionUnit.position.x': break;
+            case 'injectionUnit.fillingLevel.level': break;
+            case 'injectionUnit.fillingLevel.minLevel': break;
+            case 'injectionUnit.fillingLevel.maxLevel': break;
+            case 'injectionUnit.windowLocked': break;
+            /* Savety Door */
+            case 'savetyDoor.position.max': break;
+            case 'savetyDoor.position.min': break;
+            case 'savetyDoor.position.x': break;
+            case 'savetyDoor.locked': break;
+            /* Locking Unit */
+            case 'lockingUnit.position.max': break;
+            case 'lockingUnit.position.min': break;
+            case 'lockingUnit.position.x': break;
+            case 'lockingUnit.locked': break;
+            case 'lockingUnit.closingForce.max': break;
+            case 'lockingUnit.closingForce.min': break;
+            case 'lockingUnit.closingForce.force': break;
+            /* Material Info */
+            case 'materialInfo.temp': break;
+            case 'materialInfo.material': break;
+            case 'materialInfo.pressure.maxForce': break;
+            case 'materialInfo.pressure.minForce': break;
+            case 'materialInfo.pressure.force': break;
+
             default: console.log("Variable not found!");
         }
 
