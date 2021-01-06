@@ -74,13 +74,18 @@ router.get("/variable/:machineId/:name/:newValue", function(req, res, next){
 
     // const newState = req.body;
 
-    machine?.changeState(req.params.name, req.params.newValue);
+    if(machine != undefined){
+        const result = machine?.changeState(req.params.name, req.params.newValue);
+        res.json({ msg: "Variable change resulted in: "+result });
+    }
+
+
 
     // if(newState == undefined) res.json("Machine state was not provided!");
 
     // if(newState != undefined && machine != undefined) DatabaseHandler.getDbInstance().update(machine.id, newState);
 
-    res.json("State changed successfully.");
+
 
 });
 

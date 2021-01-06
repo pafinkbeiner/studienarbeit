@@ -68,26 +68,26 @@ export class MachineInstance implements MachineTemplate{
             case 'injectionUnit.fillingLevel.maxLevel': this.machineData.injectionUnit.fillingLevel.maxLevel =  Number.parseInt( value ); break;
             case 'injectionUnit.windowLocked': this.machineData.injectionUnit.windowLocked = (value == "true") ? true : false ; break;
             /* Savety Door */
-            case 'savetyDoor.position.max': break;
-            case 'savetyDoor.position.min': break;
-            case 'savetyDoor.position.x': break;
-            case 'savetyDoor.locked': break;
+            case 'savetyDoor.position.max': this.machineData.savetyDoor.position.max = Number.parseInt(value); break;
+            case 'savetyDoor.position.min': this.machineData.savetyDoor.position.min = Number.parseInt(value); break;
+            case 'savetyDoor.position.x': this.machineData.savetyDoor.position.x = Number.parseInt(value); break;
+            case 'savetyDoor.locked': this.machineData.savetyDoor.locked = (value == "true") ? true : false; break;
             /* Locking Unit */
-            case 'lockingUnit.position.max': break;
-            case 'lockingUnit.position.min': break;
-            case 'lockingUnit.position.x': break;
-            case 'lockingUnit.locked': break;
-            case 'lockingUnit.closingForce.max': break;
-            case 'lockingUnit.closingForce.min': break;
-            case 'lockingUnit.closingForce.force': break;
+            case 'lockingUnit.position.max': this.machineData.lockingUnit.position.max = Number.parseInt(value); break;
+            case 'lockingUnit.position.min': this.machineData.lockingUnit.position.max = Number.parseInt(value); break;
+            case 'lockingUnit.position.x': this.machineData.lockingUnit.position.max = Number.parseInt(value); break;
+            case 'lockingUnit.locked': this.machineData.lockingUnit.locked = (value == "true") ? true : false ; break;
+            case 'lockingUnit.closingForce.maxForce': this.machineData.lockingUnit.closingForce.maxForce = Number.parseInt(value); break;
+            case 'lockingUnit.closingForce.minForce': this.machineData.lockingUnit.closingForce.minForce = Number.parseInt(value); break;
+            case 'lockingUnit.closingForce.force': this.machineData.lockingUnit.closingForce.force = Number.parseInt(value); break;
             /* Material Info */
-            case 'materialInfo.temp': break;
-            case 'materialInfo.material': break;
-            case 'materialInfo.pressure.maxForce': break;
-            case 'materialInfo.pressure.minForce': break;
-            case 'materialInfo.pressure.force': break;
+            case 'materialInfo.temp': this.machineData.materialInfo.temp = Number.parseInt(value); break;
+            case 'materialInfo.material': this.machineData.materialInfo.material = value; break;
+            case 'materialInfo.pressure.maxForce': this.machineData.materialInfo.pressure.maxForce = Number.parseInt(value); break;
+            case 'materialInfo.pressure.minForce': this.machineData.materialInfo.pressure.minForce = Number.parseInt(value); break;
+            case 'materialInfo.pressure.force': this.machineData.materialInfo.pressure.force = Number.parseInt(value); break;
 
-            default: console.log("Variable not found!");
+            default: return "Variable could not get found!";
         }
 
     }
@@ -127,15 +127,9 @@ export class MachineInstance implements MachineTemplate{
             console.log("Workflow started!");
             this.closeLockingUnit(this.mountInjectionUnit);
         } else {
-            if(this.machineData.operation.operationMode != OperationMode.automatic){
-                console.log("Worklow could not get started, Operation mode is nota automatic");
-            }
-            if(this.machineData.operation.power != true){
-                console.log("Worklow could not get started, Power off");
-            }
-            if(this.machineData.savetyDoor.locked != true){
-                console.log("Worklow could not get started, Machine Door is not locked");
-            }
+            if(this.machineData.operation.operationMode != OperationMode.automatic) console.log("Worklow could not get started, Operation mode is nota automatic");
+            if(this.machineData.operation.power != true) console.log("Worklow could not get started, Power off");
+            if(this.machineData.savetyDoor.locked != true) console.log("Worklow could not get started, Machine Door is not locked");
         }
     }
 
