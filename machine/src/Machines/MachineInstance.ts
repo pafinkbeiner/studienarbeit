@@ -123,11 +123,19 @@ export class MachineInstance implements MachineTemplate{
     // Automated Workflow
 
     startAutomatedWorkflow() {
+
+        //TEMP
+        this.machineData.operation.operationMode = OperationMode.automatic;
+        this.machineData.operation.power = true;
+        this.machineData.savetyDoor.locked = true;
+        this.persistData();
+        //END TEMP
+
         if (this.machineData.operation.operationMode == OperationMode.automatic && this.machineData.operation.power == true && this.machineData.savetyDoor.locked == true) {
             console.log("Workflow started!");
             this.closeLockingUnit(this.mountInjectionUnit);
         } else {
-            if(this.machineData.operation.operationMode != OperationMode.automatic) console.log("Worklow could not get started, Operation mode is nota automatic");
+            if(this.machineData.operation.operationMode != OperationMode.automatic) console.log("Worklow could not get started, Operation mode is not automatic");
             if(this.machineData.operation.power != true) console.log("Worklow could not get started, Power off");
             if(this.machineData.savetyDoor.locked != true) console.log("Worklow could not get started, Machine Door is not locked");
         }
@@ -259,9 +267,12 @@ export class MachineInstance implements MachineTemplate{
     }
 
     persistData(){
-        setInterval(() => {
-            DatabaseHandler.getDbInstance().update(this.id, this);
-        }, 1000);
+
+        DatabaseHandler.getDbInstance().update(this.id, this);
+
+        //Publish data over MQTT
+        //Path: monitoring/machines/{this.id}
+
     }
 
     executeAction = (timerIntervall: number, accuracy: number, action: (...args: any[]) => void ) => {
