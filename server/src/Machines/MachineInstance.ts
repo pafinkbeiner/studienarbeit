@@ -1,10 +1,10 @@
 import { uuid } from "uuidv4";
+import { getHeapStatistics } from "v8";
 import { DatabaseHandler } from "../Helper/Database";
 import { LogHandler } from "../Helper/Log";
-import { Machine, State } from "../models/Machine";
+import { Machine, OperationMode, State } from "../models/Machine";
 import { MachineTemplate } from "../models/MachineTemplate";
 import { MessageTemplates } from "../models/Status";
-import client from "../Helper/mqtt";
 
 export class MachineInstance implements MachineTemplate{
 
@@ -23,16 +23,16 @@ export class MachineInstance implements MachineTemplate{
 
     constructor(name: string){
         this.accuracy = 10;
-        this.timerIntervall = 5000;
+        this.timerIntervall = 1000;
         this.id = uuid(); 
 
         this._machineData = 
             {
                 name: name,
                 state: State.none,
-                machineDetails : { model: "Allrounder", serialNumber: 123456},
-                operation : { power: false, statusLED: { green: false, yellow: false, red: false, }, running: false, automatic: false },
-                injectionUnit : { position: { max: 500, min: 0, x: 500 }, fillingLevel: { level: 0, minLevel: 0, maxLevel: 100 }},
+                machineDetails : { model: "Allrounder", serialNumber: 123456, sparDistance: 500 , maxClosingForce: 1000},
+                operation : { power: false, statusLED: { green: false, yellow: false, red: false, }, running: false, operationMode: OperationMode.semiAutomatic },
+                injectionUnit : { position: { max: 500, min: 0, x: 500 }, fillingLevel: { level: 0, minLevel: 0, maxLevel: 100 }, windowLocked: true},
                 savetyDoor : { position: { max: 500, min: 0, x: 500 }, locked: false },
                 lockingUnit : { locked: false, position: { max: 500, min: 0, x: 500 }, closingForce: {force: 0, maxForce: 1000, minForce: 0}},
                 materialInfo : { temp: 0, material: "pp" , pressure: {force: 0, maxForce: 1000, minForce: 0}},
@@ -49,9 +49,16 @@ export class MachineInstance implements MachineTemplate{
             case 'name': this.machineData.name = value; break;
             case 'operation.power': this.machineData.operation.power = value == 'true' ? true : false; break;
             case 'savetyDoor.locked': this.machineData.savetyDoor.locked = value == 'true' ? true : false; break;
+            case 'operation.operationMode': 
+                if(value == 'automatic') this.machineData.operation.operationMode = OperationMode.automatic;
+                else if(value == 'semiautomatic') this.machineData.operation.operationMode = OperationMode.semiAutomatic;
+                else if(value == 'stopped') this.machineData.operation.operationMode = OperationMode.stopped;
+            break;
             /* machine Details */
             case 'machineDetails.model': this.machineData.machineDetails.model = value; break;
             case 'machineDetails.serialNumber': this.machineData.machineDetails.serialNumber = Number.parseInt( value ); break;
+            case 'machineDetails.sparDistance': this.machineData.machineDetails.sparDistance = Number.parseInt( value ); break;
+            case 'machineDetails.maxClosingForce': this.machineData.machineDetails.maxClosingForce = Number.parseInt( value ) ;break;
             /* Injection Unit */
             case 'injectionUnit.position.max': this.machineData.injectionUnit.position.max = Number.parseInt( value ); break;               
             case 'injectionUnit.position.min': this.machineData.injectionUnit.position.min = Number.parseInt( value ); break;
@@ -59,6 +66,7 @@ export class MachineInstance implements MachineTemplate{
             case 'injectionUnit.fillingLevel.level': this.machineData.injectionUnit.fillingLevel.level =  Number.parseInt( value ); break;
             case 'injectionUnit.fillingLevel.minLevel': this.machineData.injectionUnit.fillingLevel.minLevel =  Number.parseInt( value ); break;
             case 'injectionUnit.fillingLevel.maxLevel': this.machineData.injectionUnit.fillingLevel.maxLevel =  Number.parseInt( value ); break;
+            case 'injectionUnit.windowLocked': this.machineData.injectionUnit.windowLocked = (value == "true") ? true : false ; break;
             /* Savety Door */
             case 'savetyDoor.position.max': this.machineData.savetyDoor.position.max = Number.parseInt(value); break;
             case 'savetyDoor.position.min': this.machineData.savetyDoor.position.min = Number.parseInt(value); break;
@@ -96,26 +104,41 @@ export class MachineInstance implements MachineTemplate{
 
     resetToDefault() {
         this.machineData.state = State.none;
-        this.machineData.machineDetails = { model: "Allrounder", serialNumber: 123456};
-        this.machineData.operation = { power: false, statusLED: { green: false, yellow: false, red: false, }, running: false, automatic: false };
-        this.machineData.injectionUnit = { position: { max: 500, min: 0, x: 500 }, fillingLevel: { level: 0, minLevel: 0, maxLevel: 100 }};
+        this.machineData.machineDetails = { model: "Allrounder", serialNumber: 123456, sparDistance: 500 , maxClosingForce: 1000};
+        this.machineData.operation = { power: false, statusLED: { green: false, yellow: false, red: false, }, running: false, operationMode: OperationMode.semiAutomatic };
+        this.machineData.injectionUnit = { position: { max: 500, min: 0, x: 500 }, fillingLevel: { level: 0, minLevel: 0, maxLevel: 100 }, windowLocked: true};
         this.machineData.savetyDoor = { position: { max: 500, min: 0, x: 500 }, locked: false };
         this.machineData.lockingUnit = { locked: false, position: { max: 500, min: 0, x: 500 }, closingForce: {force: 0, maxForce: 1000, minForce: 0}};
         this.machineData.materialInfo = { temp: 0, material: "pp" , pressure: {force: 0, maxForce: 1000, minForce: 0}};
     };
+
+    setMachineMode(data: OperationMode) {
+        if (data == OperationMode.automatic || data == OperationMode.semiAutomatic) {
+            this.machineData.operation.operationMode = data;
+        } else {
+            LogHandler.getLogInstance().log("error while setting machine mode");
+        }
+    }
+
     // Automated Workflow
 
     startAutomatedWorkflow() {
 
         //TEMP
-        this.machineData.operation.automatic = true;
+        this.machineData.operation.operationMode = OperationMode.automatic;
         this.machineData.operation.power = true;
         this.machineData.savetyDoor.locked = true;
         this.persistData();
         //END TEMP
 
-        console.log("Workflow started!")
-        this.closeLockingUnit(this.mountInjectionUnit);
+        if (this.machineData.operation.operationMode == OperationMode.automatic && this.machineData.operation.power == true && this.machineData.savetyDoor.locked == true) {
+            console.log("Workflow started!");
+            this.closeLockingUnit(this.mountInjectionUnit);
+        } else {
+            if(this.machineData.operation.operationMode != OperationMode.automatic) console.log("Worklow could not get started, Operation mode is not automatic");
+            if(this.machineData.operation.power != true) console.log("Worklow could not get started, Power off");
+            if(this.machineData.savetyDoor.locked != true) console.log("Worklow could not get started, Machine Door is not locked");
+        }
     }
 
     closeLockingUnit = (next: Function) => {
@@ -123,25 +146,23 @@ export class MachineInstance implements MachineTemplate{
 
         if(this.machineData.operation.power != true){
             this.machineData.state = State.none;
-            return;
+            return MessageTemplates.failureMessage.msg = "Machine is not powered on";
         }
+
+        // TODO add additional conditions
 
         // Automate closing locking unit
         this.machineData.lockingUnit.position.x = this.machineData.lockingUnit.position.min;
 
-        this.executeAction(this.timerIntervall, this.accuracy, async() => {
+        this.executeAction(this.timerIntervall, this.accuracy, () => {
             this.machineData.lockingUnit.closingForce.force += this.machineData.lockingUnit.closingForce.maxForce / this.accuracy;
             if(this.machineData.lockingUnit.position.x != undefined) this.machineData.lockingUnit.position.x += this.machineData.lockingUnit.position.max / this.accuracy;
-            try{ 
-                await client.publish(`machines/${this.id}/data/lockingUnit/closingForce/force`, JSON.stringify(this.machineData.lockingUnit.closingForce.force));
-                await client.publish(`machines/${this.id}/data/lockingUnit/position/x`, JSON.stringify(this.machineData.lockingUnit.position.x));
-            }catch(e){ console.log("Error while mqtt operation in state: ",this.machineData.state); }
         });
 
         // Savety Ruleset 
         this.machineData.lockingUnit.closingForce.force = this.machineData.lockingUnit.closingForce.maxForce;
         
-        if(this.machineData.operation.automatic == true) setTimeout(() => { next(this.injectMaterial); }, this.timerIntervall);
+        if(this.machineData.operation.operationMode == OperationMode.automatic) setTimeout(() => { next(this.injectMaterial); }, this.timerIntervall);
     }
 
     mountInjectionUnit = (next: Function) => {
@@ -155,19 +176,15 @@ export class MachineInstance implements MachineTemplate{
         // Automate mounting Injection Unit
         this.machineData.injectionUnit.position.x = this.machineData.injectionUnit.position.min;
 
-        this.executeAction(this.timerIntervall, this.accuracy, async() => {
+        this.executeAction(this.timerIntervall, this.accuracy, () => {
             this.machineData.injectionUnit.fillingLevel.level += this.machineData.injectionUnit.fillingLevel.maxLevel / this.accuracy;
             if(this.machineData.injectionUnit.position.x != undefined) this.machineData.injectionUnit.position.x += this.machineData.injectionUnit.position.max / this.accuracy;
-            try{ 
-                await client.publish(`machines/${this.id}/data/injectionUnit/fillingLevel/level`, JSON.stringify(this.machineData.injectionUnit.fillingLevel.level));
-                await client.publish(`machines/${this.id}/data/injectionUnit/position/x`, JSON.stringify(this.machineData.injectionUnit.position.x));
-            }catch(e){ console.log("Error while mqtt operation in state: ",this.machineData.state); }
         });
 
         // Savety Ruleset
         this.machineData.injectionUnit.fillingLevel.level = this.machineData.injectionUnit.fillingLevel.maxLevel;
 
-        if(this.machineData.operation.automatic == true) setTimeout(() => { next(this.unmountInjectionUnit); }, this.timerIntervall);
+        if(this.machineData.operation.operationMode == OperationMode.automatic) setTimeout(() => { next(this.unmountInjectionUnit); }, this.timerIntervall);
     }
 
     injectMaterial = (next: Function) => {
@@ -180,17 +197,14 @@ export class MachineInstance implements MachineTemplate{
 
         // Automate mounting Injection Unit
 
-        this.executeAction(this.timerIntervall, this.accuracy, async() => {
+        this.executeAction(this.timerIntervall, this.accuracy, () => {
             this.machineData.injectionUnit.fillingLevel.level -= this.machineData.injectionUnit.fillingLevel.maxLevel / this.accuracy;
-            try{ 
-                await client.publish(`machines/${this.id}/data/injectionUnit/fillingLevel/level`, JSON.stringify(this.machineData.injectionUnit.fillingLevel.level));
-            }catch(e){ console.log("Error while mqtt operation in state: ",this.machineData.state); }
         });
 
         //Savety Ruleset
         this.machineData.injectionUnit.fillingLevel.level = this.machineData.injectionUnit.fillingLevel.minLevel;
 
-        if(this.machineData.operation.automatic == true) setTimeout(() => { next(this.wait);}, this.timerIntervall);
+        if(this.machineData.operation.operationMode == OperationMode.automatic) setTimeout(() => { next(this.wait);}, this.timerIntervall);
     }
 
     unmountInjectionUnit = (next: Function) => {
@@ -204,24 +218,19 @@ export class MachineInstance implements MachineTemplate{
         // Automate mounting Injection Unit
         this.machineData.injectionUnit.position.x = this.machineData.injectionUnit.position.max;
 
-        this.executeAction(this.timerIntervall, this.accuracy, async() => {
+        this.executeAction(this.timerIntervall, this.accuracy, () => {
             this.machineData.injectionUnit.fillingLevel.level -= this.machineData.injectionUnit.fillingLevel.maxLevel / this.accuracy;
             if(this.machineData.injectionUnit.position.x != undefined) this.machineData.injectionUnit.position.x -= this.machineData.injectionUnit.position.max / this.accuracy;
-            try{ 
-                await client.publish(`machines/${this.id}/data/injectionUnit/fillingLevel/level`, JSON.stringify(this.machineData.injectionUnit.fillingLevel.level));
-                await client.publish(`machines/${this.id}/data/injectionUnit/position/x`, JSON.stringify(this.machineData.injectionUnit.position.x));
-            }catch(e){ console.log("Error while mqtt operation in state: ",this.machineData.state); }
         });
     
         // Savety Ruleset
         this.machineData.injectionUnit.fillingLevel.level = this.machineData.injectionUnit.fillingLevel.minLevel;
         this.machineData.injectionUnit.position.x = this.machineData.injectionUnit.position.max;
 
-        if(this.machineData.operation.automatic == true) setTimeout(() => { next(this.openLockingUnit);}, this.timerIntervall);
+        if(this.machineData.operation.operationMode == OperationMode.automatic) setTimeout(() => { next(this.openLockingUnit);}, this.timerIntervall);
     }
 
     wait = (next: Function) => {
-        this.persistData();
         this.machineData.state = State.wait;
 
         if(this.machineData.operation.power != true){
@@ -231,11 +240,10 @@ export class MachineInstance implements MachineTemplate{
 
         this.executeAction(this.timerIntervall, this.accuracy, () => {});
 
-        if(this.machineData.operation.automatic == true) setTimeout(() => { next(this.closeLockingUnit);}, this.timerIntervall);
+        if(this.machineData.operation.operationMode == OperationMode.automatic) setTimeout(() => { next(this.closeLockingUnit);}, this.timerIntervall);
     }
 
     openLockingUnit = (next: Function) => {
-        this.persistData();
         this.machineData.state = State.openLockingUnit;
 
         if(this.machineData.operation.power != true){
@@ -246,34 +254,24 @@ export class MachineInstance implements MachineTemplate{
         // Automate closing locking unit
         this.machineData.lockingUnit.position.x = this.machineData.lockingUnit.position.max;
 
-        this.executeAction(this.timerIntervall, this.accuracy, async() => {
+        this.executeAction(this.timerIntervall, this.accuracy, () => {
             this.machineData.lockingUnit.closingForce.force -= this.machineData.lockingUnit.closingForce.maxForce / this.accuracy;
             if(this.machineData.lockingUnit.position.x != undefined) this.machineData.lockingUnit.position.x -= this.machineData.lockingUnit.position.max / this.accuracy;
-            try{ 
-                await client.publish(`machines/${this.id}/data/lockingUnit/closingForce/level`, JSON.stringify(this.machineData.lockingUnit.closingForce.force));
-                await client.publish(`machines/${this.id}/data/lockingUnit/position/x`, JSON.stringify(this.machineData.lockingUnit.position.x));
-            }catch(e){ console.log("Error while mqtt operation in state: ",this.machineData.state); }
         });
     
         // Savety Ruleset 
         this.machineData.lockingUnit.closingForce.force = this.machineData.lockingUnit.closingForce.minForce;
         this.machineData.lockingUnit.position.x = this.machineData.lockingUnit.position.min;
 
-        if(this.machineData.operation.automatic == true) setTimeout(() => { next(this.mountInjectionUnit);}, this.timerIntervall);
+        if(this.machineData.operation.operationMode == OperationMode.automatic) setTimeout(() => { next(this.mountInjectionUnit);}, this.timerIntervall);
     }
 
-    async persistData(){
+    persistData(){
 
-        await DatabaseHandler.getDbInstance().update(this.id, this);
+        DatabaseHandler.getDbInstance().update(this.id, this);
 
         //Publish data over MQTT
         //Path: monitoring/machines/{this.id}
-        try{
-            await client.publish(`machines/${this.id}/params`, JSON.stringify(this));
-            console.log("Send machine data", this.id);
-        }catch(e){
-            console.log("Failed: ",e);
-        }
 
     }
 

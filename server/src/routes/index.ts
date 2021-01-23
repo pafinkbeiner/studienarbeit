@@ -2,6 +2,7 @@ import * as express from "express";
 import {DatabaseHandler } from "../Helper/Database";
 import { LogHandler } from "../Helper/Log";
 import { MachineInstance } from "../Machines/MachineInstance";
+import { OperationMode } from "../models/Machine";
 
 const router = express.Router();
 

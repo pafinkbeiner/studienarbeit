@@ -5,6 +5,8 @@ export interface Machine{
     machineDetails: {
         model: string; 
         serialNumber: number;
+        sparDistance: number;
+        maxClosingForce: number;
     },
     // Allgemein
     operation: {
@@ -15,12 +17,13 @@ export interface Machine{
             red: boolean;
         },
         running: boolean;
-        automatic: boolean;
+        operationMode: OperationMode
     },    
     // Spritzeinheit
     injectionUnit: {
         position: Position;
         fillingLevel: Level;
+        windowLocked: boolean;
     },
     // Sicherheitstüre
     savetyDoor: {
@@ -39,6 +42,12 @@ export interface Machine{
         material: string;
         pressure: Force;
     }
+}
+
+export enum OperationMode{
+    automatic,
+    semiAutomatic,
+    stopped
 }
 
 export enum State{

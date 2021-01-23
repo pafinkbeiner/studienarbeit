@@ -1,4 +1,4 @@
-import { Machine } from "./Machine";
+import { Machine, OperationMode } from "./Machine";
 
 export interface MachineTemplate{
 
@@ -15,6 +15,7 @@ export interface MachineTemplate{
     resetToDefault: Function;
     persistData: Function;
     checkConstraints: () => boolean;
+    setMachineMode: (data: OperationMode) => any;
 
     //Automated Workflow
     closeLockingUnit: (next: Function) => any;
