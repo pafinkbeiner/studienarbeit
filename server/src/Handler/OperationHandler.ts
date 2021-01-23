@@ -1,24 +1,24 @@
-export let power = (machineId: string) => {
+export let power = (machineId: string, message: Buffer) => {
     console.log("Operation Handler", machineId)
 }
 
-export let statusLEDGreen = (machineId: string) => {
+export let statusLEDGreen = (machineId: string, message: Buffer) => {
     console.log("Operation Handler", machineId)
 }
 
-export let statusLEDYellow = (machineId: string) => {
+export let statusLEDYellow = (machineId: string, message: Buffer) => {
     console.log("Operation Handler", machineId)
 }
 
-export let statusLEDRed = (machineId: string) => {
+export let statusLEDRed = (machineId: string, message: Buffer) => {
     console.log("Operation Handler", machineId)
 }
 
-export let running = (machineId: string) => {
+export let running = (machineId: string, message: Buffer) => {
     console.log("Operation Handler", machineId)
 }
 
-export let automatic = (machineId: string) => {
+export let automatic = (machineId: string, message: Buffer) => {
     console.log("Operation Handler", machineId)
 }
 
