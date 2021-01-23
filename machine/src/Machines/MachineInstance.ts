@@ -280,8 +280,10 @@ export class MachineInstance implements MachineTemplate{
             action();
 
             //React to power loss
-            if(this.machineData.operation.power == false) clearInterval(intId);
-            client.publish(`machines/${this.id}/data/operation/statusLED/red`, JSON.stringify(true))
+            if(this.machineData.operation.power == false) {
+                clearInterval(intId);
+                client.publish(`machines/${this.id}/data/operation/statusLED/red`, JSON.stringify(true))
+            }
 
             i++;
             if(i >= steps) clearInterval(intId);
