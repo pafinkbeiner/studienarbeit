@@ -1,5 +1,6 @@
 import * as express from "express";
 import {DatabaseHandler } from "../Helper/Database";
+import client from "../Helper/mqtt";
 import { MachineInstance } from "../Machines/MachineInstance";
 
 const router = express.Router();
@@ -8,7 +9,7 @@ const router = express.Router();
 let machines: Array<MachineInstance> = [];
 
 /* GET home page. */
-router.get("/", function(req, res, next) {
+router.get("/", async function(req, res, next) {
   res.json(DatabaseHandler.getDbInstance().getAll())
 });
 
@@ -23,17 +24,31 @@ router.get("/get/:machineId", (req, res, next) => {
 
 });
 
-router.get("/new/:name", function(req, res, next){
+router.get("/new/:name", async function(req, res, next){
   let machine: MachineInstance = new MachineInstance(req.params.name);
   machines.push(machine);
+
+  let machineIds:any = [];
+  DatabaseHandler.getDbInstance().getAll().map(item => {
+      machineIds.push(item.id);
+  });
+  await client.publish("machines", JSON.stringify(machineIds));
+
   res.json({id: machine.id});
 });
 
-router.get("/delete/:id", function(req, res, next){
+router.get("/delete/:id", async function(req, res, next){
 
     if(machines.find(item => item.id == req.params.id) != undefined){
         DatabaseHandler.getDbInstance().remove(req.params.id)
         machines = machines.filter(item => item.id != req.params.id);
+
+        let machineIds:any = [];
+        DatabaseHandler.getDbInstance().getAll().map(item => {
+            machineIds.push(item.id);
+        });
+        await client.publish("machines", JSON.stringify(machineIds));
+
         res.json("Successfully Deleted Machine with id: "+req.params.id);
     }else{
         res.json("No machine found!");

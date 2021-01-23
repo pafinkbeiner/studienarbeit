@@ -2,7 +2,6 @@ import { uuid } from "uuidv4";
 import { DatabaseHandler } from "../Helper/Database";
 import { Machine, State } from "../models/Machine";
 import { MachineTemplate } from "../models/MachineTemplate";
-import { MessageTemplates } from "../models/Status";
 import client from "../Helper/mqtt";
 
 export class MachineInstance implements MachineTemplate{
@@ -310,6 +309,7 @@ export class MachineInstance implements MachineTemplate{
 
         try{
             await client.publish(`machines/${this.id}/logs`, JSON.stringify(logString));
+            console.log(logString);
         }catch(e){
             this.log("Failed sending log string: ",e);
         }

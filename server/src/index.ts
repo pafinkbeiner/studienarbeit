@@ -1,5 +1,14 @@
-import dotenv from "dotenv";
+import executeMachineChange from "./Handler/MachineHandler";
+import client from "./Helper/mqtt";
 
-// initialize configuration
-dotenv.config();
+// Subscribtion
+client.subscribe("machines");
 
+//
+client.on('message', function (topic, message) {
+
+    if(topic == "machines") executeMachineChange(message);
+
+    console.log(`Topic: ${topic} und Message: ${message}`);
+
+})
