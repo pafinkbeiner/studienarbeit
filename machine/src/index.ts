@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import express from "express";
 import path from "path";
 import indexRouter from "./routes/index"
-import logRouter from "./routes/logs"
 import machineRouter from "./routes/machines"
 const createError = require("http-errors");
 
@@ -26,7 +25,6 @@ app.use( express.static( path.join( __dirname, "public" ) ) );
 
 // Configure routes
 app.use("/", indexRouter);
-app.use("/logs", logRouter);
 app.use("/machines", machineRouter);
 
 // catch 404 and forward to error handler

@@ -1,6 +1,5 @@
 import { uuid } from "uuidv4";
 import { DatabaseHandler } from "../Helper/Database";
-import { LogHandler } from "../Helper/Log";
 import { Machine, State } from "../models/Machine";
 import { MachineTemplate } from "../models/MachineTemplate";
 import { MessageTemplates } from "../models/Status";
@@ -287,6 +286,30 @@ export class MachineInstance implements MachineTemplate{
             i++;
             if(i >= steps) clearInterval(intId);
         }, this.timerIntervall/this.accuracy);
+
+    }
+
+    async log(msg: string){
+
+        var logString: string = msg;
+
+        if(msg.search('error') != -1 || msg.search('Error') != -1){
+            logString = "[ERROR] "+logString;
+        }
+        if(msg.search('debug') != -1 || msg.search('Debug') != -1){
+            logString = "[DEBUG] "+logString;
+        }
+        if(msg.search('info') != -1 || msg.search('Info') != -1){
+            logString = "[INFO] "+logString;
+        }
+
+        logString = logString+" at: "+Date.now();
+
+        try{
+            await client.publish(`machines/${this.id}/logs`, JSON.stringify(logString));
+        }catch(e){
+            console.log("Failed sending log string: ",e);
+        }
 
     }
 
