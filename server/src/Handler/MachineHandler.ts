@@ -1,8 +1,10 @@
 import { createSubscribtions } from "../models/SubscribtionTemplate";
 
-let executeMachineChange = (buffer: Buffer) => {
+export let machineIds: string[] = [];
 
-    let machineIds: string[] = JSON.parse(buffer.toString());
+export let executeMachineChange = (buffer: Buffer) => {
+
+    machineIds = JSON.parse(buffer.toString());
 
     console.log(machineIds);
 
@@ -11,4 +13,3 @@ let executeMachineChange = (buffer: Buffer) => {
 
 }
 
-export default executeMachineChange;
