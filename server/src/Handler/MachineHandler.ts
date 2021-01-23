@@ -1,13 +1,8 @@
-import { createSubscribtions } from "../models/SubscribtionTemplate";
-
-export let machineIds: string[] = [];
 
 export let executeMachineChange = (buffer: Buffer) => {
-
-    machineIds = JSON.parse(buffer.toString());
-
-    // Setup mqtt subscribtions
-    //createSubscribtions(machineIds);
-
+    console.log(JSON.parse(buffer.toString()))
 }
 
+export let state = (machineId: string, message: Buffer) => {
+    console.log("Machine Handler", machineId)
+}

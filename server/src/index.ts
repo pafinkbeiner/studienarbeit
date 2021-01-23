@@ -1,4 +1,3 @@
-import {executeMachineChange} from "./Handler/MachineHandler";
 import { power } from "./Handler/OperationHandler";
 import client from "./Helper/mqtt";
 var mqttWildcard = require('mqtt-wildcard');
@@ -8,16 +7,17 @@ import * as SavetyDoorHandler from "./Handler/SavetyDoorHandler"
 import * as LockingUnithandler from "./Handler/LockingUnithandler"
 import * as MaterialInfoHandler from "./Handler/MaterialInfoHandler"
 import * as LogFileHandler from "./Handler/LogFileHandler"
+import * as MachineHandler from "./Handler/MachineHandler"
 
 // 
 client.on('message', function (topic, message) {
 
-    if(topic == "machines") executeMachineChange(message);
-
     // Machines
-    if(mqttWildcard(topic,`machines/+/logs`) !== null) { console.log("Hey") }
+    if(topic == "machines") MachineHandler.executeMachineChange(message);
+    // Logs
+    if(mqttWildcard(topic,`machines/+/logs`) !== null) { LogFileHandler.logs(mqttWildcard(topic,`machines/+/logs`), message) }
     // State
-    if(mqttWildcard(topic,`machines/+/data/state`) !== null) { console.log("Hey") } 
+    if(mqttWildcard(topic,`machines/+/data/state`) !== null) { MachineHandler.state(mqttWildcard(topic,`machines/+/data/state`), message) } 
     // Operation
     if(mqttWildcard(topic,`machines/+/data/operation/power`) !== null) { OperationHandler.power(mqttWildcard(topic,`machines/+/data/operation/power`), message); }
     if(mqttWildcard(topic,`machines/+/data/operation/statusLED/green`) !== null) { OperationHandler.statusLEDGreen(mqttWildcard(topic,`machines/+/data/operation/statusLED/green`), message); }
