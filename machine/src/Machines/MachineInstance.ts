@@ -138,7 +138,7 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.state = State.closeLockingUnit;
         await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
 
-        if(this.machineData.operation.power != true) this.stop();
+        if(this.machineData.operation.power != true) return;
 
         // Automate closing locking unit
         this.machineData.lockingUnit.position.x = this.machineData.lockingUnit.position.min;
@@ -162,7 +162,7 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.state = State.mountInjectionUnit;
         await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
 
-        if(this.machineData.operation.power != true) this.stop();
+        if(this.machineData.operation.power != true) return;
 
         // Automate mounting Injection Unit
         this.machineData.injectionUnit.position.x = this.machineData.injectionUnit.position.min;
@@ -186,7 +186,7 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.state = State.injectMaterial;
         await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
 
-        if(this.machineData.operation.power != true) this.stop();
+        if(this.machineData.operation.power != true) return;
 
         // Automate mounting Injection Unit
 
@@ -207,7 +207,7 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.state = State.unmountInjectionUnit;
         await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
 
-        if(this.machineData.operation.power != true) this.stop();
+        if(this.machineData.operation.power != true) return;
 
         // Automate mounting Injection Unit
         this.machineData.injectionUnit.position.x = this.machineData.injectionUnit.position.max;
@@ -232,7 +232,7 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.state = State.wait;
         await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
 
-        if(this.machineData.operation.power != true) this.stop();
+        if(this.machineData.operation.power != true) return;
 
         this.executeAction(this.timerIntervall, this.accuracy, () => {});
 
@@ -243,7 +243,7 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.state = State.openLockingUnit;
         await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
 
-        if(this.machineData.operation.power != true) this.stop();
+        if(this.machineData.operation.power != true) return;
 
         // Automate closing locking unit
         this.machineData.lockingUnit.position.x = this.machineData.lockingUnit.position.max;
@@ -276,14 +276,15 @@ export class MachineInstance implements MachineTemplate{
         var i = 0;
 
         var intId = setInterval(() => {
-            //Execute provided action
-            action();
 
-            //React to power loss
+            //React to NOT AUS
             if(this.machineData.operation.power == false) {
                 clearInterval(intId);
                 client.publish(`machines/${this.id}/data/operation/statusLED/red`, JSON.stringify(true))
             }
+
+            //Execute provided action
+            action();
 
             i++;
             if(i >= steps) clearInterval(intId);
@@ -319,15 +320,16 @@ export class MachineInstance implements MachineTemplate{
     }
 
     async stop(){
-        if(this.machineData.operation.power != true){
-            this.machineData.state = State.none;
-            await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
-            this.machineData.operation.statusLED.red = true;
-            await client.publish(`machines/${this.id}/data/operation/statusLED/red`, JSON.stringify(true))
-            this.machineData.operation.statusLED.green = false;
-            await client.publish(`machines/${this.id}/data/operation/statusLED/green`, JSON.stringify(false));
-        }
-        this.log("Stop initiated!!",2);
+
+        this.machineData.operation.power = false;
+        await client.publish(`machines/${this.id}/data/operation/power`, JSON.stringify(this.machineData.operation.power))
+        this.machineData.state = State.none;
+        await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
+        this.machineData.operation.statusLED.red = true;
+        await client.publish(`machines/${this.id}/data/operation/statusLED/red`, JSON.stringify(true))
+        this.machineData.operation.statusLED.green = false;
+        await client.publish(`machines/${this.id}/data/operation/statusLED/green`, JSON.stringify(false));
+        this.log("Stop initiated!!",0);
     }
 
 }

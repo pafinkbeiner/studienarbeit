@@ -71,6 +71,7 @@ router.get("/operation/:machineId/:name", function(req, res, next){
         case "unmountInjectionUnit":    machine?.unmountInjectionUnit(machine?.wait); break;
         case "wait":                    machine?.wait(machine?.openLockingUnit); break;
         case "openLockingUnit":         machine?.openLockingUnit(machine?.closeLockingUnit); break;
+        case "stop":                    machine?.stop(); break;
 
         default: res.json("Operation not found!"); break;
     }
