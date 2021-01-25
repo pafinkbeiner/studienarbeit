@@ -14,6 +14,8 @@ const PORT = process.env.PORT || 3000;
 
 io.on('connection', (socket: Socket) => {
 
+    console.log("Socket: ", socket);
+
     socket.emit('set machines', machines);
     
     socket.on('color change', colorInfo => {
