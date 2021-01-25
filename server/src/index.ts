@@ -1,8 +1,12 @@
 import { power } from "./Handler/OperationHandler";
 import client from "./Helper/mqtt";
 var mqttWildcard = require('mqtt-wildcard');
+<<<<<<< HEAD
 
 // Import of Handler
+=======
+// Import of MQTT Handler
+>>>>>>> 72c71bd68eaa4401059666e821b088e09d86813f
 import * as OperationHandler from "./Handler/OperationHandler"
 import * as InjectionUnitHandler from "./Handler/InjectionUnitHandler"
 import * as SavetyDoorHandler from "./Handler/SavetyDoorHandler"
