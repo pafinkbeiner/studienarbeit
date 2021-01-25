@@ -1,6 +1,8 @@
 import { power } from "./Handler/OperationHandler";
 import client from "./Helper/mqtt";
 var mqttWildcard = require('mqtt-wildcard');
+
+// Import of Handler
 import * as OperationHandler from "./Handler/OperationHandler"
 import * as InjectionUnitHandler from "./Handler/InjectionUnitHandler"
 import * as SavetyDoorHandler from "./Handler/SavetyDoorHandler"
@@ -9,7 +11,6 @@ import * as MaterialInfoHandler from "./Handler/MaterialInfoHandler"
 import * as LogFileHandler from "./Handler/LogFileHandler"
 import * as MachineHandler from "./Handler/MachineHandler"
 
-// 
 client.on('message', function (topic, message) {
 
     // Machines
