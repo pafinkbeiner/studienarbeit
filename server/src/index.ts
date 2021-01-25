@@ -1,14 +1,18 @@
 import client from "./Helper/mqtt";
 var mqttWildcard = require('mqtt-wildcard');
+import dotenv from "dotenv"
 
 // Import of Handler
-import * as OperationHandler from "./Handler/OperationHandler"
-import * as InjectionUnitHandler from "./Handler/InjectionUnitHandler"
-import * as SavetyDoorHandler from "./Handler/SavetyDoorHandler"
-import * as LockingUnithandler from "./Handler/LockingUnithandler"
-import * as MaterialInfoHandler from "./Handler/MaterialInfoHandler"
-import * as LogFileHandler from "./Handler/LogFileHandler"
-import * as MachineHandler from "./Handler/MachineHandler"
+import * as OperationHandler from "./MQTTHandler/OperationHandler"
+import * as InjectionUnitHandler from "./MQTTHandler/InjectionUnitHandler"
+import * as SavetyDoorHandler from "./MQTTHandler/SavetyDoorHandler"
+import * as LockingUnithandler from "./MQTTHandler/LockingUnitHandler"
+import * as MaterialInfoHandler from "./MQTTHandler/MaterialInfoHandler"
+import * as LogFileHandler from "./MQTTHandler/LogFileHandler"
+import * as MachineHandler from "./MQTTHandler/MachineHandler"
+
+dotenv.config();
+
 
 client.on('message', function (topic, message) {
 

@@ -43,4 +43,6 @@ client.on("connect", () => {
     client.subscribe(`machines/+/data/materialInfo/pressure/force`)
 })
 
+
+
 export default client;
