@@ -1,4 +1,3 @@
-import { power } from "./Handler/OperationHandler";
 import client from "./Helper/mqtt";
 var mqttWildcard = require('mqtt-wildcard');
 
