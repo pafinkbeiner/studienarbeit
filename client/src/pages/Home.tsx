@@ -17,7 +17,7 @@ const Home: React.FC = () => {
         console.log(data);
       });
 
-  }, [button])
+  }, [])
 
   return (
     <IonPage>

@@ -27,7 +27,10 @@ const subject = new Subject<{ name: string, color: { red: number, green: number,
 io.on('connection', (socket: Socket) => {
 
     console.log("Socket: Success");
-    socket.emit('machineRes', "HEy");
+
+    setInterval( () => { socket.emit('machineRes', { test: "test" }); }, 8000 )
+
+    
     
     socket.on('machine', machineId => {
         console.log("Change");
