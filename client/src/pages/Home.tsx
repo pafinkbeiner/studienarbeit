@@ -1,25 +1,29 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, {useEffect, useState} from 'react';
 import ExploreContainer from '../components/ExploreContainer';
-import io from "socket.io-client"
+import {socket} from "../helper/ws"
 import './Home.css';
 
 const Home: React.FC = () => {
 
   const [state, setstate] = useState("");
+  const [button, setButton] = useState(false)
 
   useEffect(() => {
-      const socket = io('http://localhost:3000')
-      socket.on('color change', (data: any) => {
-        setstate(data);
+
+    console.log(button);
+    
+      socket.on('machineRes', (data: any) => {
+        console.log(data);
       });
-  }, [])
+
+  }, [button])
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Blank</IonTitle>
+          <IonTitle>Title{state}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -28,6 +32,7 @@ const Home: React.FC = () => {
             <IonTitle size="large">{state}</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <button onClick={(e) => { setButton( !button ) }} >BUTTON</button>
         <ExploreContainer />
       </IonContent>
     </IonPage>

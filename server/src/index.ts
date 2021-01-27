@@ -2,7 +2,13 @@ import client from "./Helper/mqtt";
 var mqttWildcard = require('mqtt-wildcard');
 import dotenv from "dotenv"
 
-// Import of Handler
+
+// Websockets
+import io from "./Helper/ws"
+import { Socket } from "socket.io";
+import { Subject } from "rxjs";
+
+// Import of MQTT Handler
 import * as OperationHandler from "./MQTTHandler/OperationHandler"
 import * as InjectionUnitHandler from "./MQTTHandler/InjectionUnitHandler"
 import * as SavetyDoorHandler from "./MQTTHandler/SavetyDoorHandler"
@@ -11,38 +17,30 @@ import * as MaterialInfoHandler from "./MQTTHandler/MaterialInfoHandler"
 import * as LogFileHandler from "./MQTTHandler/LogFileHandler"
 import * as MachineHandler from "./MQTTHandler/MachineHandler"
 
-import express from 'express';
-import { Server as SocketIOServer, Socket } from 'socket.io';
-import http from 'http';
-import { Subject } from 'rxjs';
-
-
-
+// Setup Enviroment Variables
 dotenv.config();
 
-const app = express();
-const httpServer = http.createServer(app);
-const io = new SocketIOServer(httpServer);
 
-const machines: string[] = [];
-const subject = new Subject<{ name: string, color: { red: number, green: number, blue: number }}>();
 
-const PORT = process.env.PORT || 3000;
+const subject = new Subject<{ name: string, color: { red: number, green: number, blue: number }| undefined}>();
 
 io.on('connection', (socket: Socket) => {
 
-    console.log("Socket: ", socket);
-
-    socket.emit('set machines', machines);
+    console.log("Socket: Success");
+    socket.emit('machineRes', "HEy");
     
-    socket.on('color change', colorInfo => {
-        subject.next(colorInfo);
-        socket.broadcast.emit('color change', colorInfo);
+    socket.on('machine', machineId => {
+        console.log("Change");
+        subject.next(undefined);
+        socket.emit('machineRes', machineId);
     });
+
+    socket.on("disconnect", () => {
+        console.log("Client disconnected");
+      });
 
 });
 
-httpServer.listen(3000, () => { "Server Listening on port"+ 3000 })
 
 client.on('message', function (topic, message) {
 
