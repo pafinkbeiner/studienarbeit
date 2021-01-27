@@ -1,7 +1,9 @@
-import client from "./Helper/mqtt";
-var mqttWildcard = require('mqtt-wildcard');
+// General
 import dotenv from "dotenv"
 
+// MQTT
+import client from "./Helper/mqtt";
+var mqttWildcard = require('mqtt-wildcard');
 
 // Websockets
 import io from "./Helper/ws"
@@ -20,29 +22,31 @@ import * as MachineHandler from "./MQTTHandler/MachineHandler"
 // Setup Enviroment Variables
 dotenv.config();
 
-
-
-const subject = new Subject<{ name: string, color: { red: number, green: number, blue: number }| undefined}>();
+export const subject = new Subject<number>()
 
 io.on('connection', (socket: Socket) => {
 
-    console.log("Socket: Success");
+    console.log(`Client with IP: ${socket.conn.remoteAddress} connected successfully to the ws Server!`);
 
-    setInterval( () => { socket.emit('machineRes', { test: "test" }); }, 8000 )
+    // setInterval( () => { socket.emit('machineRes', { test: "test" }); }, 8000 )
 
-    
-    
-    socket.on('machine', machineId => {
-        console.log("Change");
-        subject.next(undefined);
-        socket.emit('machineRes', machineId);
+    subject.asObservable().subscribe(data => {
+        socket.emit("machineRes",JSON.stringify(data));
     });
 
+
+    socket.on('machine', machineId => {
+        console.log("Change");
+        socket.emit('machineRes', machineId);
+    });
+    
     socket.on("disconnect", () => {
         console.log("Client disconnected");
       });
-
+    
 });
+
+
 
 
 client.on('message', function (topic, message) {

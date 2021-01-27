@@ -236,6 +236,7 @@ export class MachineInstance implements MachineTemplate{
 
         this.executeAction(this.timerIntervall, this.accuracy, () => {});
 
+
         if(this.machineData.operation.automatic == true) setTimeout(() => { next(this.closeLockingUnit);}, this.timerIntervall);
     }
 

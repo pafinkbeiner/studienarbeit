@@ -6,6 +6,7 @@ client.on("connect", () => {
     console.log("Connected to MQTT Broker!")
 
     client.subscribe(`machines/+/logs`)
+
     // State
     client.subscribe(`machines/+/data/state`)
     // Operation

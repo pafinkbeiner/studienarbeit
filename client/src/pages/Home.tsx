@@ -13,11 +13,13 @@ const Home: React.FC = () => {
 
     console.log(button);
     
+      socket.emit('machine', "237482947")
+
       socket.on('machineRes', (data: any) => {
         console.log(data);
       });
 
-  }, [])
+  })
 
   return (
     <IonPage>
