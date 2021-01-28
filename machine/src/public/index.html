@@ -138,7 +138,7 @@
                                       <button class="btn grey" onclick="operate('${machine.id}')">
                                         Trigger
                                       </button>`;
-            rowActive.innerHTML = machine.data._machineData.operation.running == true ? "YES" : "NO";
+            rowActive.innerHTML = machine.data._machineData.operation.running == true ? '<img class="green-circle" src="/green_circle.png"/>': '<img class="red-circle" src="/red_circle.png"/>';
             rowRemove.innerHTML = `<button class="btn grey" id="rm-${machine.id}" onclick="remove('${machine.id}')">
                                         Remove
                                    </button>`;
