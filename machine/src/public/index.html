@@ -15,8 +15,8 @@
   </head>
   <body>
     <nav class="black">
-      <a href="/" class="brand-logo white-text">Machine Controller</a>
-      <button class="btn grey right" onclick="toggleContainer()">
+      <a href="/" class="brand-logo white-text" style="margin-left: 10px;">Machine Controller</a>
+      <button class="btn white black-text right btn-add-machine" onclick="toggleContainer()">
         Add Machine
       </button>
     </nav>
@@ -69,7 +69,7 @@
         .addEventListener("onclick", () => {location.reload()});
     </script>
 
-    <table class="striped" id="machine-table" style="padding: 50px;">
+    <table class="striped" id="machine-table" style="margin-left: 10px;">
       <thead>
         <tr>
           <th>ID</th>
