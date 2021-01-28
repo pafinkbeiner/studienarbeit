@@ -105,6 +105,8 @@ export class MachineInstance implements MachineTemplate{
 
     async startAutomatedWorkflow() {
 
+        console.log("Start Workflow")
+
         //TEMP
         this.machineData.operation.automatic = true;
         this.log("Automatic change: operation mode to automatic");
@@ -125,6 +127,10 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.operation.statusLED.red = false;
         this.log("Automatic change: disabled red led");
         await client.publish(`machines/${this.id}/data/operation/statusLED/red`, JSON.stringify(this.machineData.operation.statusLED.red))
+
+        this.machineData.operation.running = true;
+        this.log("Automatic change: running to true");
+        await client.publish(`machines/${this.id}/data/operation/running`, JSON.stringify(this.machineData.operation.running))
 
 
         this.persistData();
@@ -324,6 +330,9 @@ export class MachineInstance implements MachineTemplate{
 
         this.machineData.operation.power = false;
         await client.publish(`machines/${this.id}/data/operation/power`, JSON.stringify(this.machineData.operation.power))
+        this.machineData.state = State.none;
+        this.machineData.operation.running = false;
+        await client.publish(`machines/${this.id}/data/operation/running`, JSON.stringify(this.machineData.operation.running))
         this.machineData.state = State.none;
         await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
         this.machineData.operation.statusLED.red = true;

@@ -1,95 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link rel="stylesheet" href="/main.css" />
 
     <title>Machine Control</title>
-</head>
-<body>
-    
-    <nav>
-
-        <input type="text" name="newMachineName" id="newMachineName" placeholder="Insert new machine name...">
-
-        <button onclick="addNewMachine()">Add</button>
-
+  </head>
+  <body>
+    <nav class="black">
+      <a href="/" class="brand-logo white-text">Machine Controller</a>
+      <button class="btn grey right" onclick="toggleContainer()">
+        Add Machine
+      </button>
     </nav>
 
+    <div class="add-container" id="add-container">
+      <button class="black-text exit-btn" onclick="toggleContainer()">X</button>
+      <h5>Add Machine</h5>
+      <br /><br />
+      <form>
+        <label for="name">Machine name: </label>
+        <input
+          class="input"
+          type="text"
+          name="name"
+          id="name"
+          placeholder="new machine name..."
+        />
+        <br /><br />
+        <button onclick="submitFormData()" id="add-submit" class="btn grey" type="submit">Add</button>
+      </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
     <script>
-        const addNewMachine = () => {
-            const name = document.getElementById("newMachineName").textContent;
-            console.log("Try to create new machine with name: ", name);
+      var url = "http://172.29.0.75:5000";
 
-            fetch(`http://localhost:5000/machines/new/${name}`).then(res => {console.log("Got response after creating..")}).then(data => {console.log(data.id)})
-
+      function toggleContainer() {
+        const addContainer = document.getElementById("add-container");
+        if (
+          addContainer.style.display == "none" ||
+          addContainer.style.display == ""
+        ) {
+          addContainer.style.display = "block";
+        } else {
+          addContainer.style.display = "none";
         }
+      }
+
+      const submitFormData = async() => {
+        const name = document.getElementById("name").value;
+        console.log(name);
+        const res = await axios.get(`${url}/machines/new/${name}`)
+        alert("Machine started with id: "+res.data.id);
+        toggleContainer();
+      } 
+
+      document
+        .getElementById("add-submit")
+        .addEventListener("onclick", () => {location.reload()});
     </script>
 
     <table class="striped" id="machine-table">
-        <thead>
-          <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Operation</th>
-              <th>Remove</th>
-          </tr>
-        </thead>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Operation</th>
+          <th>Active</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
 
-        <tbody>
+      <tbody></tbody>
+    </table>
 
-          <tr>
-            <td>Alvin</td>
-            <td>Eclair</td>
-            <td>$0.87</td>
-            <td>$0.87</td>
-          </tr>
-        </tbody>
-      </table>
 
-      <script>
 
-        /* Get Machine Data */
-        fetch('http://localhost:5000/machines')
-        .then( res => {
-            console.log("Received a response!", res.json())
-        })
-        .then(data => {
+    <script>
+      const operate = async (id) => {
+        // Get operation name from text field
+        const operationName = document.getElementById(`op-name-${id}`).value;
+        const res = await axios.get(
+          `${url}/machines/operation/${id}/${operationName}`
+        );
 
-            const machines = data;
-            console.log("Machines", machines);
+        alert(res.data);
+        
+        console.log(
+          `Operate:  ${url}/machines/operation/${id}/${operationName}`
+        );
+        location.reload();
+      };
 
-            /* Insert Rows */
-            const table = document.getElementById("machine-table");
+      const remove = async (id) => {
+        console.log(id);
+        const res = await axios.get(`${url}/machines/delete/${id}`);
+        alert(res.data);
+        console.log(`Delete:  ${url}/machines/delete/${id}`);
+        location.reload();
+      };
 
-            if(machines != undefined)
+      const req = async () => {
+        const res = await axios.get(`${url}/machines`);
 
-            machines.map(machine => {
+        const machines = res.data;
 
-                var row = table.insertRow(0);
-                
-                /* Create Cells */
-                const rowMachineId = row.insertCell(0);
-                const rowMachineName = row.insertCell(1);
-                const rowOperation = row.insertCell(2);
-                const rowRemove = row.insertCell(3);
+        console.log("Machines: ", machines);
 
-                rowMachineId.innerHTML = machine.id;
-                rowMachineName.innerHTML = machine.id;
-                rowOperation.innerHTML = "<button>Test</button>"
-                rowOperation.innerHTML = "<button>Remove</button>"
-            });
-        });
+        /* Insert Rows */
+        const table = document.getElementById("machine-table");
 
-      </script>
+        if (machines != undefined)
+          machines.map((machine) => {
+            var row = table.insertRow(1);
 
+            /* Create Cells */
+            const rowMachineId = row.insertCell(0);
+            const rowMachineName = row.insertCell(1);
+            const rowOperation = row.insertCell(2);
+            const rowActive = row.insertCell(3)
+            const rowRemove = row.insertCell(4);
+
+            rowMachineId.innerHTML = machine.id;
+            rowMachineName.innerHTML = machine.data._machineData.name;
+            rowOperation.innerHTML = `<input style="width: 500px !important;" type="text" class="input" id="op-name-${machine.id}">
+                                      </input>
+                                      <button class="btn grey" onclick="operate('${machine.id}')">
+                                        Trigger
+                                      </button>`;
+            rowActive.innerHTML = machine.data._machineData.operation.running == true ? "YES" : "NO";
+            rowRemove.innerHTML = `<button class="btn grey" id="rm-${machine.id}" onclick="remove('${machine.id}')">
+                                        Remove
+                                   </button>`;
+          });
+
+      };
+      req();
+    </script>
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-
-</body>
+  </body>
 </html>

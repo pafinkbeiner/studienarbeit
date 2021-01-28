@@ -57,6 +57,8 @@ router.get("/delete/:id", async function(req, res, next){
 
 router.get("/operation/:machineId/:name", function(req, res, next){
 
+    console.log(`Perform Operation${req.params.name} on machine with id: ${req.params.machineId}`);
+
     const machine = machines.find(item => item.id == req.params.machineId);
 
     if(machine == undefined) res.json("Machine was not found.");
@@ -104,5 +106,20 @@ router.get("/variable/:machineId/:name/:newValue", function(req, res, next){
 
 
 });
+
+router.post("/new", async function(req, res, next){
+
+    let machine: MachineInstance = new MachineInstance(req.body.name);
+    machines.push(machine);
+  
+    // Search for Machine Id in DB
+    let machineIds:any = [];
+    DatabaseHandler.getDbInstance().getAll().map(item => {
+        machineIds.push(item.id);
+    });
+    await client.publish("machines", JSON.stringify(machineIds));
+    
+    res.redirect("back");
+  });
 
 export default router;
