@@ -42,7 +42,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 
     <script>
-      var url = "http://172.29.0.75:5000";
+      var url = "http://localhost:5000";
 
       function toggleContainer() {
         const addContainer = document.getElementById("add-container");
@@ -69,7 +69,7 @@
         .addEventListener("onclick", () => {location.reload()});
     </script>
 
-    <table class="striped" id="machine-table">
+    <table class="striped" id="machine-table" style="padding: 50px;">
       <thead>
         <tr>
           <th>ID</th>
@@ -83,6 +83,7 @@
       <tbody></tbody>
     </table>
 
+    <button onclick="window.location.reload()" style="position: absolute; right: 10px; bottom: 10px;" class="btn black white-text">Reload</button>
 
 
     <script>
