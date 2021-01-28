@@ -87,6 +87,7 @@
 
 
     <script>
+      /* Execute specified Operation */
       const operate = async (id) => {
         // Get operation name from text field
         const operationName = document.getElementById(`op-name-${id}`).value;
@@ -102,6 +103,7 @@
         location.reload();
       };
 
+      /* Remove Machine with specified ID */
       const remove = async (id) => {
         console.log(id);
         const res = await axios.get(`${url}/machines/delete/${id}`);
@@ -121,6 +123,8 @@
 
         if (machines != undefined)
           machines.map((machine) => {
+
+            /* Create a new Row */
             var row = table.insertRow(1);
 
             /* Create Cells */
