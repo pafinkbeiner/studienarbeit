@@ -111,11 +111,10 @@
       };
 
       const req = async () => {
+
+        /* Make Request to get data */
         const res = await axios.get(`${url}/machines`);
-
         const machines = res.data;
-
-        console.log("Machines: ", machines);
 
         /* Insert Rows */
         const table = document.getElementById("machine-table");
@@ -131,6 +130,7 @@
             const rowActive = row.insertCell(3)
             const rowRemove = row.insertCell(4);
 
+            /* Add Content to Cells */
             rowMachineId.innerHTML = machine.id;
             rowMachineName.innerHTML = machine.data._machineData.name;
             rowOperation.innerHTML = `<input style="width: 500px !important;" type="text" class="input" id="op-name-${machine.id}">
