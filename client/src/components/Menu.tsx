@@ -12,7 +12,7 @@ import {
 
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { bookmarkOutline, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp} from 'ionicons/icons';
+import { paperPlaneOutline, paperPlaneSharp, appsSharp, appsOutline, settingsSharp, settingsOutline, albumsSharp, albumsOutline, cubeSharp, cubeOutline} from 'ionicons/icons';
 import './Menu.css';
 
 interface AppPage {
@@ -26,14 +26,35 @@ const appPages: AppPage[] = [
   {
     title: 'Dashboard',
     url: '/Dashboard',
+    iosIcon: appsOutline,
+    mdIcon: appsSharp
+  },
+  {
+    title: 'Machines',
+    url: '/Machines',
+    iosIcon: albumsOutline,
+    mdIcon: albumsSharp
+  },
+  {
+    title: 'Machine',
+    url: '/Machine',
+    iosIcon: cubeOutline,
+    mdIcon: cubeSharp
+  }
+];
+
+const additionalAppPages: AppPage[] = [
+  {
+    title: 'Help',
+    url: '/Help',
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp
   },
   {
-    title: 'Inbox',
-    url: '/page/Inbox',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp
+    title: 'Settings',
+    url: '/Settings',
+    iosIcon: settingsOutline,
+    mdIcon: settingsSharp
   }
 ];
 
@@ -49,6 +70,16 @@ const Menu: React.FC = () => {
           <IonListHeader>Condition Monitoring</IonListHeader>
           <br/>
           {appPages.map((appPage, index) => {
+            return (
+              <IonMenuToggle key={index} autoHide={false}>
+                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
+                  <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            );
+          })}
+          {additionalAppPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>

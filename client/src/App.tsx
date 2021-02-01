@@ -24,6 +24,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Machines from './pages/Machines/Machines';
 
 const App: React.FC = () => {
 
@@ -35,6 +36,7 @@ const App: React.FC = () => {
           <IonRouterOutlet id="main">
             <Route path="/page/:name" component={Page} exact />
             <Route path="/Dashboard" component={Dashboard}/>
+            <Route path="/Machines" component={Machines}/>
             <Redirect from="/" to="/page/Inbox" exact />
           </IonRouterOutlet>
         </IonSplitPane>
