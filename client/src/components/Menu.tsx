@@ -12,7 +12,7 @@ import {
 
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { paperPlaneOutline, paperPlaneSharp, appsSharp, appsOutline, settingsSharp, settingsOutline, albumsSharp, albumsOutline, cubeSharp, cubeOutline} from 'ionicons/icons';
+import { paperPlaneOutline, paperPlaneSharp, appsSharp, appsOutline, settingsSharp, settingsOutline, albumsSharp, albumsOutline, cubeSharp, cubeOutline, helpCircleOutline, helpCircleSharp} from 'ionicons/icons';
 import './Menu.css';
 
 interface AppPage {
@@ -47,8 +47,8 @@ const additionalAppPages: AppPage[] = [
   {
     title: 'Help',
     url: '/Help',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp
+    iosIcon: helpCircleOutline,
+    mdIcon: helpCircleSharp
   },
   {
     title: 'Settings',
@@ -79,14 +79,13 @@ const Menu: React.FC = () => {
               </IonMenuToggle>
             );
           })}
+          
           {additionalAppPages.map((appPage, index) => {
             return (
-              <IonMenuToggle key={index} autoHide={false}>
                 <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
                   <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
                   <IonLabel>{appPage.title}</IonLabel>
                 </IonItem>
-              </IonMenuToggle>
             );
           })}
         </IonList>
