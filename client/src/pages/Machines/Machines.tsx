@@ -4,6 +4,7 @@ import mqtt from "mqtt"
 // import { useParams } from 'react-router';
 import './Machines.css';
 import client from "../../helper/mqtt"
+import Navbar from '../../components/Navbar/Navbar';
 
 const Machines: React.FC = () => {
 
@@ -22,14 +23,8 @@ const Machines: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonTitle>Machines</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+
+      <Navbar title="Machines"/>
 
       <IonContent fullscreen>
         <IonHeader collapse="condense">

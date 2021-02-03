@@ -1,7 +1,10 @@
 import mqtt from 'mqtt'
-const client = mqtt.connect(`mqtt://mqtt.paul-finkbeiner.de`);
+const client = mqtt.connect(`tcp://localhost:8888`);
 
 client.on("connect", () => {
+
+    console.log("Connected sucessfully!")
+
     client.subscribe(`machines/+/logs`)
 
     // State

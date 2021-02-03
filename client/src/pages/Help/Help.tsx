@@ -1,31 +1,30 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import React from 'react';
-import Navbar from '../../components/Navbar/Navbar';
+import React, { useEffect } from 'react';
 // import { useParams } from 'react-router';
-import './Dashboard.css';
+import './Help.css';
+import Navbar from '../../components/Navbar/Navbar';
 
-const Dashboard: React.FC = () => {
+const Help: React.FC = () => {
 
-  // const { name } = useParams<{ name: string; }>();
 
   return (
     <IonPage>
 
-      <Navbar title="Dashboard"/>
+      <Navbar title="Help"/>
 
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Dashboard</IonTitle>
+            <IonTitle size="large">Help</IonTitle>
           </IonToolbar>
         </IonHeader>
 
         {/* Content */}
-        <h1>Dashboard</h1>
+        <h1>{"Hello"}</h1>
 
       </IonContent>
     </IonPage>
   );
 };
 
-export default Dashboard;
+export default Help;

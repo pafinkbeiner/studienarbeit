@@ -1,7 +1,7 @@
 import Menu from './components/Menu';
 import Page from './pages/Page';
 import React from 'react';
-import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import { IonApp, IonPage, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 
@@ -25,6 +25,10 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Machines from './pages/Machines/Machines';
+import Navbar from './components/Navbar/Navbar';
+import Machine from './pages/Machine/Machine';
+import Help from './pages/Help/Help';
+import Settings from './pages/Settings/Settings';
 
 const App: React.FC = () => {
 
@@ -34,10 +38,12 @@ const App: React.FC = () => {
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
-            <Route path="/page/:name" component={Page} exact />
             <Route path="/Dashboard" component={Dashboard}/>
             <Route path="/Machines" component={Machines}/>
-            <Redirect from="/" to="/page/Inbox" exact />
+            <Route path="/Machine" component={Machine}/>
+            <Route path="/Help" component={Help}/>
+            <Route path="/Settings" component={Settings}/>
+            <Redirect from="/" to="/Dashboard" exact />
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>
