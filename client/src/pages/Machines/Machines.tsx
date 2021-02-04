@@ -17,6 +17,8 @@ const Machines: React.FC = () => {
 
       setMessages(payload.toString()+"topic: "+topic);
 
+      console.log("Message received: ", payload.toString())
+
     });
 
   }, []);
@@ -34,7 +36,7 @@ const Machines: React.FC = () => {
         </IonHeader>
 
         {/* Content */}
-        <h1>{messages}</h1>
+        <p>{messages}</p>
 
       </IonContent>
     </IonPage>
