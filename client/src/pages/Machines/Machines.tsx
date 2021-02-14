@@ -23,6 +23,10 @@ const Machines: React.FC = () => {
 
   }, []);
 
+  const trigger = () => {
+    client.subscribe(`machines/+/logs`);
+  }
+
   return (
     <IonPage>
 
@@ -38,6 +42,8 @@ const Machines: React.FC = () => {
         {/* Content */}
         <p>{messages}</p>
 
+        <button onClick={trigger}>Logs</button>
+ 
       </IonContent>
     </IonPage>
   );

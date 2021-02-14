@@ -1,47 +1,53 @@
 import mqtt from 'mqtt'
 const client = mqtt.connect(`tcp://test.mosquitto.org:8080`);
 
+const str = [
+
+    `machines/+/logs`,
+
+    `machines/+/data/state`,
+
+    `machines/+/data/operation/power`,
+    `machines/+/data/operation/statusLED/green`,
+    `machines/+/data/operation/statusLED/yellow`,
+    `machines/+/data/operation/statusLED/red`,
+    `machines/+/data/operation/running`,
+    `machines/+/data/operation/automatic`,
+
+    `machines/+/data/injectionUnit/position/max`,
+    `machines/+/data/injectionUnit/position/min`,
+    `machines/+/data/injectionUnit/position/x`,
+    `machines/+/data/injectionUnit/fillingLevel/level`,
+    `machines/+/data/injectionUnit/fillingLevel/minLevel`,
+    `machines/+/data/injectionUnit/fillingLevel/maxLevel`,
+
+    `machines/+/data/savetyDoor/position/max`,
+    `machines/+/data/savetyDoor/position/min`,
+    `machines/+/data/savetyDoor/position/x`,
+    `machines/+/data/savetyDoor/locked`,
+
+    `machines/+/data/lockingUnit/position/max`,
+    `machines/+/data/lockingUnit/position/min`,
+    `machines/+/data/lockingUnit/position/x`,
+    `machines/+/data/lockingUnit/locked`,
+    `machines/+/data/lockingUnit/closingForce/maxForce`,
+    `machines/+/data/lockingUnit/closingForce/minForce`,
+    `machines/+/data/lockingUnit/closingForce/force`,
+
+    `machines/+/data/materialInfo/temp`,
+    `machines/+/data/materialInfo/material`,
+    `machines/+/data/materialInfo/pressure/maxForce`,
+    `machines/+/data/materialInfo/pressure/minForce`,
+    `machines/+/data/materialInfo/pressure/force`,
+
+];
+
 client.on("connect", () => {
 
     console.log("Connected sucessfully!")
 
-    client.subscribe(`machines/+/logs`)
+    // str.map(topic => client.subscribe(topic));
 
-    // State
-    client.subscribe(`machines/+/data/state`)
-    // Operation
-    client.subscribe(`machines/+/data/operation/power`)
-    client.subscribe(`machines/+/data/operation/statusLED/green`)
-    client.subscribe(`machines/+/data/operation/statusLED/yellow`)
-    client.subscribe(`machines/+/data/operation/statusLED/red`)
-    client.subscribe(`machines/+/data/operation/running`)
-    client.subscribe(`machines/+/data/operation/automatic`)
-    // Injection Unit
-    client.subscribe(`machines/+/data/injectionUnit/position/max`)
-    client.subscribe(`machines/+/data/injectionUnit/position/min`)
-    client.subscribe(`machines/+/data/injectionUnit/position/x`)
-    client.subscribe(`machines/+/data/injectionUnit/fillingLevel/level`)
-    client.subscribe(`machines/+/data/injectionUnit/fillingLevel/minLevel`)
-    client.subscribe(`machines/+/data/injectionUnit/fillingLevel/maxLevel`)
-    // Savety Door 
-    client.subscribe(`machines/+/data/savetyDoor/position/max`)
-    client.subscribe(`machines/+/data/savetyDoor/position/min`)
-    client.subscribe(`machines/+/data/savetyDoor/position/x`)
-    client.subscribe(`machines/+/data/savetyDoor/locked`)
-    // Locking Unit
-    client.subscribe(`machines/+/data/lockingUnit/position/max`)
-    client.subscribe(`machines/+/data/lockingUnit/position/min`)
-    client.subscribe(`machines/+/data/lockingUnit/position/x`)
-    client.subscribe(`machines/+/data/lockingUnit/locked`)
-    client.subscribe(`machines/+/data/lockingUnit/closingForce/maxForce`)
-    client.subscribe(`machines/+/data/lockingUnit/closingForce/minForce`)
-    client.subscribe(`machines/+/data/lockingUnit/closingForce/force`)
-    // Material Info
-    client.subscribe(`machines/+/data/materialInfo/temp`)
-    client.subscribe(`machines/+/data/materialInfo/material`)
-    client.subscribe(`machines/+/data/materialInfo/pressure/maxForce`)
-    client.subscribe(`machines/+/data/materialInfo/pressure/minForce`)
-    client.subscribe(`machines/+/data/materialInfo/pressure/force`)
 })
 
 export default client;
