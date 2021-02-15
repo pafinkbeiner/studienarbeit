@@ -1,4 +1,4 @@
-
+import { State } from 'zustand';
 
 // State
 export interface Machine{
@@ -17,10 +17,10 @@ export interface Sensor{
 }
 
 // Final Export
-export interface StoreModel{
+export interface StoreModel extends State{
     machines: Machine[];
     alert: string;
     loading: boolean;
-    addSensor: Action<StoreModel, {machineId: string, sensor: Sensor}>;
-    addMachine: Action<StoreModel, Machine>;
+    addSensor: (payload: {machineId: string, sensor: Sensor}) => void;
+    addMachine: (machine: Machine) => void;
 }
