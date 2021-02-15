@@ -9,9 +9,7 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 
   useEffect(() => {
     setTimeout(()=> {props.storeModel.setLoading(false)},1000)
-    return () => {
-      props.storeModel.setLoading(false)
-    };
+
   })
 
   return (

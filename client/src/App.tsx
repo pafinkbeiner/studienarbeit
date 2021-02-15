@@ -34,9 +34,32 @@ import { Sensor, StoreModel, AMachine } from './models/Store';
 
 const App: React.FC = () => {
 
+  // State Management
   const [machines, setMachines] = useState<AMachine[]>([]);
   const [loading, setLoading ] = useState(true);
   const [alert, setAlert] = useState("");
+
+  // Machine Opertations
+  const addMachine = (machine: AMachine) => setMachines([...machines, machine]);
+  const removeMachine = (machineId: string) => setMachines(machines.filter(machine => machine.id != machineId));
+
+  // Sensor Operations
+  const addSensor = (machineId: string, sensor: Sensor) => {
+    const machine = machines.find(machine => machine.id == machineId);
+    if(machine != undefined){
+      machine.sensors.push(sensor);
+      removeMachine(machine.id);
+      addMachine(machine);
+    }
+  }
+  const removeSensor = (machineId: string, sensorId: string) => {
+    const machine = machines.find(machine => machine.id == machineId);
+    if(machine != undefined){
+      machine.sensors = machine.sensors.filter(sensor => sensor.id != sensorId);
+      removeMachine(machine.id);
+      addMachine(machine);
+    }
+  }
 
   const StoreModel: StoreModel = {
     machines,
@@ -53,7 +76,7 @@ const App: React.FC = () => {
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
-            <Route path="/Dashboard" render={(props) => <Dashboard  storeModel={StoreModel}  />} />
+            <Route path="/Dashboard" component={() => <Dashboard  storeModel={StoreModel}  />} />
             <Route path="/Machines" component={Machines}/>
             <Route path="/Machine" component={Machine}/>
             <Route path="/Help" component={Help}/>

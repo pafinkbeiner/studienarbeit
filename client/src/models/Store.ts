@@ -9,6 +9,7 @@ export interface AMachine{
 }
 
 export interface Sensor{
+    id: string;
     name: string;
     min: any;
     max: any;
