@@ -77,7 +77,7 @@ const App: React.FC = () => {
           <Menu />
           <IonRouterOutlet id="main">
             <Route path="/Dashboard" component={() => <Dashboard  storeModel={StoreModel}  />} />
-            <Route path="/Machines" component={Machines}/>
+            <Route path="/Machines" component={() => <Machines storeModel={StoreModel}/>}/>
             <Route path="/Machine" component={Machine}/>
             <Route path="/Help" component={Help}/>
             <Route path="/Settings" component={Settings}/>
@@ -89,7 +89,7 @@ const App: React.FC = () => {
         isOpen={loading}
         onDidDismiss={() => setLoading(false)}
         message={'Please wait...'}
-        duration={5000}
+        duration={500}
       />
     </IonApp>
   );
