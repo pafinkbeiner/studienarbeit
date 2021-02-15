@@ -67,7 +67,9 @@ const App: React.FC = () => {
     loading,
     setMachines,
     setLoading, 
-    setAlert
+    setAlert,
+    addMachine,
+    removeMachine
 }
 
   return (

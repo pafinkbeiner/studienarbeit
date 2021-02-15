@@ -1,5 +1,5 @@
 import {
-    IonButton,
+  IonButton,
   IonButtons,
   IonCard,
   IonCardContent,
@@ -13,6 +13,7 @@ import {
   IonLabel,
   IonMenuButton,
   IonPage,
+  IonRouterLink,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -20,19 +21,31 @@ import React, { useEffect } from "react";
 import { pin, walk, warning, wifi, wine } from "ionicons/icons";
 import { AMachine } from "../../../models/Store";
 
-const Machines: React.FC<{machine: AMachine}> = (props) => {
+const MachineCard: React.FC<{ machine: AMachine }> = (props) => {
+    
   return (
-    <IonCard>
-    <img src="https://www.arburg.com/fileadmin/redaktion/bilder/vollbild_650x320px/144999_920s.jpg" />
-    <IonCardHeader>
-      <IonCardSubtitle>DestinatIonCIonCard-subtitle</IonCardSubtitle>
-      <IonCardTitle>Madison, WI</IonCardTitle>
-    </IonCardHeader>
-    <IonCardContent>
-      Founded in 1829 on an isthmus between Lake Monona and Lake Mendota, Madison was named the capital of the Wisconsin Territory in 1836.
-    </IonCardContent>
-  </IonCard>
+    <IonCard routerLink={`/Machine/${props.machine.id}`}>
+      <img src="https://www.arburg.com/fileadmin/redaktion/bilder/vollbild_650x320px/144999_920s.jpg" />
+      <IonCardHeader>
+        <IonCardTitle>{props.machine.name}</IonCardTitle>
+        <IonCardSubtitle>{props.machine.id}</IonCardSubtitle>
+      </IonCardHeader>
+      <IonCardContent>
+        {props.machine.sensors.length > 1 ? (
+          <>
+            {props.machine.sensors.map((sensor, index) => {
+                return (index == props.machine.sensors.length) ? <>{sensor.name}</> : <>{sensor.name}, </>;
+            })}
+          </>
+        ) : (
+          <>
+            Es wurden bei der Maschine <b>{props.machine.name}</b> keine Sensoren
+            erfasst!
+          </>
+        )}
+      </IonCardContent>
+    </IonCard>
   );
 };
 
-export default Machines;
+export default MachineCard;

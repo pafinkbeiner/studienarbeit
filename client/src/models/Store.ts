@@ -26,4 +26,6 @@ export interface StoreModel{
     setMachines: Dispatch<SetStateAction<AMachine[]>>;
     setLoading: Dispatch<SetStateAction<boolean>>;
     setAlert: Dispatch<SetStateAction<string>>;
+    addMachine: (machine: AMachine) => void;
+    removeMachine: (machineId: string) => void;
 }
