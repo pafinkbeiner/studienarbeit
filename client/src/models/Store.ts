@@ -1,7 +1,8 @@
-import { State } from 'zustand';
+import { Dispatch, SetStateAction } from "react";
+
 
 // State
-export interface Machine{
+export interface AMachine{
     id: string;
     name: string;
     sensors: Sensor[];
@@ -17,10 +18,11 @@ export interface Sensor{
 }
 
 // Final Export
-export interface StoreModel extends State{
-    machines: Machine[];
+export interface StoreModel{
+    machines: AMachine[];
     alert: string;
     loading: boolean;
-    addSensor: (payload: {machineId: string, sensor: Sensor}) => void;
-    addMachine: (machine: Machine) => void;
+    setMachines: Dispatch<SetStateAction<AMachine[]>>;
+    setLoading: Dispatch<SetStateAction<boolean>>;
+    setAlert: Dispatch<SetStateAction<string>>;
 }

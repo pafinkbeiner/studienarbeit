@@ -1,12 +1,18 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
-// import { useParams } from 'react-router';
+import { useParams } from 'react-router';
 import './Dashboard.css';
+import { AMachine, StoreModel } from '../../models/Store';
 
-const Dashboard: React.FC = () => {
+const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 
-  // const { name } = useParams<{ name: string; }>();
+  useEffect(() => {
+    setTimeout(()=> {props.storeModel.setLoading(false)},1000)
+    return () => {
+      props.storeModel.setLoading(false)
+    };
+  })
 
   return (
     <IonPage>

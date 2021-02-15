@@ -1,7 +1,7 @@
 import Menu from './components/Menu';
 import Page from './pages/Page';
-import React from 'react';
-import { IonApp, IonPage, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import React, { useEffect, useState } from 'react';
+import { IonApp, IonLoading, IonPage, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 
@@ -30,7 +30,22 @@ import Machine from './pages/Machine/Machine';
 import Help from './pages/Help/Help';
 import Settings from './pages/Settings/Settings';
 
+import { Sensor, StoreModel, AMachine } from './models/Store';
+
 const App: React.FC = () => {
+
+  const [machines, setMachines] = useState<AMachine[]>([]);
+  const [loading, setLoading ] = useState(true);
+  const [alert, setAlert] = useState("");
+
+  const StoreModel: StoreModel = {
+    machines,
+    alert,
+    loading,
+    setMachines,
+    setLoading, 
+    setAlert
+}
 
   return (
     <IonApp>
@@ -38,7 +53,7 @@ const App: React.FC = () => {
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
-            <Route path="/Dashboard" component={Dashboard}/>
+            <Route path="/Dashboard" render={(props) => <Dashboard  storeModel={StoreModel}  />} />
             <Route path="/Machines" component={Machines}/>
             <Route path="/Machine" component={Machine}/>
             <Route path="/Help" component={Help}/>
@@ -47,6 +62,12 @@ const App: React.FC = () => {
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>
+      <IonLoading
+        isOpen={loading}
+        onDidDismiss={() => setLoading(false)}
+        message={'Please wait...'}
+        duration={5000}
+      />
     </IonApp>
   );
 };
