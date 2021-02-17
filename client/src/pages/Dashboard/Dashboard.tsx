@@ -27,17 +27,17 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
         <IonGrid>
 
           <IonRow>
-            <IonCol size="6" style={{backgroundColor: "green", height: "46.5vh", marginBottom: "0.5vh"}}>
+            <IonCol size="12" sizeLg="6" style={{backgroundColor: "green", height: "46.5vh", marginBottom: "0.5vh"}}>
               {/* Column 1 - Machine Overview */}
             </IonCol>
-            <IonCol size="6" style={{backgroundColor: "red", height: "46.5vh", marginBottom: "0.5vh"}}>
+            <IonCol size="12" sizeLg="6" style={{backgroundColor: "red", height: "46.5vh", marginBottom: "0.5vh"}}>
               {/* Column 2 - Machine Overview */}
             </IonCol>
  
-            <IonCol size="6" style={{backgroundColor: "blue" , height: "46vh"}}>
+            <IonCol size="12" sizeLg="6" style={{backgroundColor: "blue" , height: "46vh"}}>
               {/* Column 3 - Machine Overview */}
             </IonCol>
-            <IonCol size="6" style={{backgroundColor: "yellow" , height: "46vh"}}>
+            <IonCol size="12" sizeLg="6" style={{backgroundColor: "yellow" , height: "46vh"}}>
               {/* Column 4 - Machine Overview */}
             </IonCol>
           </IonRow>
