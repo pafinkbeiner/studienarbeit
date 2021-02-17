@@ -1,4 +1,4 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import { useParams } from 'react-router';
@@ -24,8 +24,28 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
           </IonToolbar>
         </IonHeader>
 
-        {/* Content */}
-        <h1>Dashboard</h1>
+        <IonGrid>
+
+          <IonRow>
+            <IonCol size="6" style={{backgroundColor: "green", height: "50vh"}}>
+              {/* Column 1 - Machine Overview */}
+            </IonCol>
+            <IonCol size="6" style={{backgroundColor: "red", height: "50vh"}}>
+              {/* Column 2 - Machine Overview */}
+            </IonCol>
+          </IonRow>
+
+          <IonRow>
+            <IonCol size="6" style={{backgroundColor: "blue" , height: "50vh"}}>
+              {/* Column 3 - Machine Overview */}
+            </IonCol>
+            <IonCol size="6" style={{backgroundColor: "yellow" , height: "50vh"}}>
+              {/* Column 4 - Machine Overview */}
+            </IonCol>
+          </IonRow>
+
+        </IonGrid>
+
 
       </IonContent>
     </IonPage>

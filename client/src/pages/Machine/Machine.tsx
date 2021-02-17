@@ -5,9 +5,10 @@ import './Machine.css';
 import Navbar from '../../components/Navbar/Navbar';
 import client from '../../helper/mqtt';
 import mqtt from "mqtt"
+import { StoreModel } from '../../models/Store';
 
 
-const Machine: React.FC = () => {
+const Machine: React.FC<{storeModel:StoreModel}> = (props) => {
 
   const [connectionStatus, setConnectionStatus] = React.useState(false);
   const [messages, setMessages] = React.useState("");

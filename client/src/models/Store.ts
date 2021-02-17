@@ -21,11 +21,11 @@ export interface Sensor{
 // Final Export
 export interface StoreModel{
     machines: AMachine[];
-    alert: string;
     loading: boolean;
     setMachines: Dispatch<SetStateAction<AMachine[]>>;
     setLoading: Dispatch<SetStateAction<boolean>>;
-    setAlert: Dispatch<SetStateAction<string>>;
     addMachine: (machine: AMachine) => void;
     removeMachine: (machineId: string) => void;
+    addSensor: (machineId: string, sensor: Sensor) => void;
+    removeSensor: (machineId: string, sensorId: string) => void;
 }

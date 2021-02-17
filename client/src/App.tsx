@@ -25,19 +25,18 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Machines from './pages/Machines/Machines';
-import Navbar from './components/Navbar/Navbar';
 import Machine from './pages/Machine/Machine';
 import Help from './pages/Help/Help';
 import Settings from './pages/Settings/Settings';
 
 import { Sensor, StoreModel, AMachine } from './models/Store';
+import PreMain from './pages/PreMain/PreMain';
 
 const App: React.FC = () => {
 
   // State Management
   const [machines, setMachines] = useState<AMachine[]>([]);
   const [loading, setLoading ] = useState(true);
-  const [alert, setAlert] = useState("");
 
   // Machine Opertations
   const addMachine = (machine: AMachine) => setMachines([...machines, machine]);
@@ -63,13 +62,13 @@ const App: React.FC = () => {
 
   const StoreModel: StoreModel = {
     machines,
-    alert,
     loading,
     setMachines,
     setLoading, 
-    setAlert,
     addMachine,
-    removeMachine
+    removeMachine,
+    addSensor,
+    removeSensor
 }
 
   return (
@@ -80,7 +79,8 @@ const App: React.FC = () => {
           <IonRouterOutlet id="main">
             <Route path="/Dashboard" component={() => <Dashboard  storeModel={StoreModel}  />} />
             <Route path="/Machines" component={() => <Machines storeModel={StoreModel}/>}/>
-            <Route path="/Machine" component={Machine}/>
+            <Route path="/Machine" component={ () => <Machine storeModel={StoreModel}/> }/>
+            <Route path="/PreMain" component={ () => <PreMain storeModel={StoreModel}/> }/>
             <Route path="/Help" component={Help}/>
             <Route path="/Settings" component={Settings}/>
             <Redirect from="/" to="/Dashboard" exact />

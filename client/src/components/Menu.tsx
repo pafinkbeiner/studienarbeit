@@ -12,7 +12,7 @@ import {
 
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { paperPlaneOutline, paperPlaneSharp, appsSharp, appsOutline, settingsSharp, settingsOutline, albumsSharp, albumsOutline, cubeSharp, cubeOutline, helpCircleOutline, helpCircleSharp} from 'ionicons/icons';
+import { paperPlaneOutline, paperPlaneSharp, appsSharp, appsOutline, settingsSharp, settingsOutline, albumsSharp, albumsOutline, cubeSharp, cubeOutline, helpCircleOutline, helpCircleSharp, gitNetworkOutline, gitNetworkSharp} from 'ionicons/icons';
 import './Menu.css';
 
 interface AppPage {
@@ -40,6 +40,12 @@ const appPages: AppPage[] = [
     url: '/Machine',
     iosIcon: cubeOutline,
     mdIcon: cubeSharp
+  },
+  {
+    title: 'Predictive Maintenance',
+    url: '/PreMain',
+    iosIcon: gitNetworkOutline,
+    mdIcon: gitNetworkSharp
   }
 ];
 
