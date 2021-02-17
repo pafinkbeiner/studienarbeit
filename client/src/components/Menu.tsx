@@ -12,7 +12,7 @@ import {
 
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { paperPlaneOutline, paperPlaneSharp, appsSharp, appsOutline, settingsSharp, settingsOutline, albumsSharp, albumsOutline, cubeSharp, cubeOutline, helpCircleOutline, helpCircleSharp, gitNetworkOutline, gitNetworkSharp} from 'ionicons/icons';
+import { appsSharp, appsOutline, settingsSharp, settingsOutline, albumsSharp, albumsOutline, cubeSharp, cubeOutline, helpCircleOutline, helpCircleSharp, gitNetworkOutline, gitNetworkSharp} from 'ionicons/icons';
 import './Menu.css';
 
 interface AppPage {
@@ -69,6 +69,8 @@ const labels = ['Help', 'Settings'];
 const Menu: React.FC = () => {
   const location = useLocation();
 
+  //TODO Hier eventuell die use Location operation im state durchführen
+
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
@@ -88,7 +90,7 @@ const Menu: React.FC = () => {
           
           {additionalAppPages.map((appPage, index) => {
             return (
-                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
+                <IonItem key={index} className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
                   <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
                   <IonLabel>{appPage.title}</IonLabel>
                 </IonItem>

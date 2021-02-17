@@ -1,16 +1,8 @@
 import {
-  IonButton,
-  IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
-  IonMenuButton,
   IonPage,
   IonRow,
   IonTitle,
@@ -44,8 +36,8 @@ const Machines: React.FC<{ storeModel: StoreModel }> = (props) => {
             {props.storeModel && (
               props.storeModel.machines.map((machine) => {
                 return (
-                  <IonCol>
-                    <MachineCard key={machine.id} machine={machine} />
+                  <IonCol key={machine.id}>
+                    <MachineCard machine={machine} />
                   </IonCol>
                 );
               })

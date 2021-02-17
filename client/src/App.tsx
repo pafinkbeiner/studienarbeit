@@ -32,7 +32,7 @@ import Settings from './pages/Settings/Settings';
 import { Sensor, StoreModel, AMachine } from './models/Store';
 import PreMain from './pages/PreMain/PreMain';
 
-const App: React.FC = () => {
+const App: React.FC = (props) => {
 
   // State Management
   const [machines, setMachines] = useState<AMachine[]>([]);
@@ -77,10 +77,11 @@ const App: React.FC = () => {
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
-            <Route path="/Dashboard" component={() => <Dashboard  storeModel={StoreModel}  />} />
-            <Route path="/Machines" component={() => <Machines storeModel={StoreModel}/>}/>
-            <Route path="/Machine" component={ () => <Machine storeModel={StoreModel}/> }/>
-            <Route path="/PreMain" component={ () => <PreMain storeModel={StoreModel}/> }/>
+            <Route path="/Dashboard" render={() => <Dashboard  storeModel={StoreModel}  />} />
+            <Route path="/Machines" render={() => <Machines storeModel={StoreModel}/>}/>
+            <Route exact path="/Machine" render={() => <Machines storeModel={StoreModel}/>}/>
+            <Route path="/Machine/:id" render={ () => <Machine {...props} storeModel={StoreModel}/> }/>
+            <Route path="/PreMain" render={ () => <PreMain storeModel={StoreModel}/> }/>
             <Route path="/Help" component={Help}/>
             <Route path="/Settings" component={Settings}/>
             <Redirect from="/" to="/Dashboard" exact />

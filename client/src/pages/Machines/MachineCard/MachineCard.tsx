@@ -1,30 +1,18 @@
 import {
-  IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonMenuButton,
-  IonPage,
-  IonRouterLink,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
-import React, { useEffect } from "react";
-import { pin, walk, warning, wifi, wine } from "ionicons/icons";
+import React from "react";
 import { AMachine } from "../../../models/Store";
+
 
 const MachineCard: React.FC<{ machine: AMachine }> = (props) => {
     
   return (
-    <IonCard routerLink={`/Machine/${props.machine.id}`}>
+    <IonCard routerLink={`/Machine/${props.machine.id}`} routerDirection="none">
       <img src="https://www.arburg.com/fileadmin/redaktion/bilder/vollbild_650x320px/144999_920s.jpg" />
       <IonCardHeader>
         <IonCardTitle>{props.machine.name}</IonCardTitle>

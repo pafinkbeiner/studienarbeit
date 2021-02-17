@@ -63,11 +63,11 @@ const AddMachine: React.FC<{addMachine: (machine: AMachine) => void;}> = (props)
             </IonCol>
 
             <IonCol size="6">
-              <IonButton onClick={() => props.addMachine({
+              <IonButton onClick={() => {props.addMachine({
                   name: machineName,
                   id: uuidv4(),
                   sensors: machineSensors
-              })}>Add</IonButton>
+              }); setModal(false); setMachineName("") }}>Add</IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
