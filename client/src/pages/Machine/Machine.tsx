@@ -17,10 +17,9 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
   useEffect(() => {
     
     const le = ((window.location.href).toString().split("/")[(window.location.href).toString().split("/").length - 1]).toString();
-    console.log(le);
+    // Following line is not necassary
     if(props.storeModel.machines.length > 0) setId(props.storeModel.machines[0].id.toString());
-    console.log(id);
-    console.log(props.storeModel.machines);
+    setId(le)
     setmachine(props.storeModel.machines.find(item => item.id == id))
 
     console.log("Found",machine)
@@ -29,7 +28,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
     return () => {
       // Unsubscribe from mqtt feed
     }
-  }, [props])
+  })
 
   //MQTT for later
   // const [connectionStatus, setConnectionStatus] = React.useState(false);

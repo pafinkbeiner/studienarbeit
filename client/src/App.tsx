@@ -31,16 +31,26 @@ import Settings from './pages/Settings/Settings';
 
 import { Sensor, StoreModel, AMachine } from './models/Store';
 import PreMain from './pages/PreMain/PreMain';
+import { DatabaseHandler } from './helper/db';
 
 const App: React.FC = (props) => {
 
+  const db = DatabaseHandler.getDbInstance();
+
   // State Management
-  const [machines, setMachines] = useState<AMachine[]>([]);
+  const [machines, setMachines] = useState<AMachine[]>([{name: "Machine 1", id:"789jf824j29f8j2", sensors: [], logs: ["log1", "log"]}, 
+                                                        {name: "Machine 2", id:"789jf82asdasdasdj2", sensors: [], logs: ["log1", "log3"]}]);
   const [loading, setLoading ] = useState(true);
 
   // Machine Opertations
-  const addMachine = (machine: AMachine) => setMachines([...machines, machine]);
-  const removeMachine = (machineId: string) => setMachines(machines.filter(machine => machine.id != machineId));
+  const addMachine = (machine: AMachine) => {
+    setMachines([...machines, machine]);
+    db.push(machine);
+  }
+  const removeMachine = (machineId: string) => {
+    setMachines(machines.filter(machine => machine.id != machineId));
+    db.remove(machineId);
+  }
 
   // Sensor Operations
   const addSensor = (machineId: string, sensor: Sensor) => {
@@ -80,7 +90,7 @@ const App: React.FC = (props) => {
             <Route path="/Dashboard" render={() => <Dashboard  storeModel={StoreModel}  />} />
             <Route path="/Machines" render={() => <Machines storeModel={StoreModel}/>}/>
             <Route exact path="/Machine" render={() => <Machines storeModel={StoreModel}/>}/>
-            <Route path="/Machine/:id" render={ () => <Machine {...props} storeModel={StoreModel}/> }/>
+            <Route path="/Machine/:id" render={ () => <Machine storeModel={StoreModel}/> }/>
             <Route path="/PreMain" render={ () => <PreMain storeModel={StoreModel}/> }/>
             <Route path="/Help" component={Help}/>
             <Route path="/Settings" component={Settings}/>

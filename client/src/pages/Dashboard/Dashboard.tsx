@@ -10,22 +10,29 @@ import { DatabaseHandler } from '../../helper/db';
 const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 
   const [selectedMachine, setSelectedMachine] = useState<AMachine>();
+  const [logs, setLogs] = useState<string[]>([])
 
 
   useEffect(() => {
     let db = DatabaseHandler.getDbInstance();
     
-    // get 10 most recent log messages from db
+    // get 2 last logs from every machine
+    if(logs.length < 1){
+      props.storeModel.machines.map(machine => {
+        db.get(machine.id)?.logs.slice(0,2).map(log => {
+          setLogs((state: string[]) => [...state, log]);
+        });
+      })
+    }
+
+
+    console.log(logs)
+
     // subscribe to log messages of all machines
     
     
 
     setTimeout(()=> {props.storeModel.setLoading(false)},1000)
-
-    return () => {
-      // unsubscribe to all log messages from the machines
-    }
-
   })
 
 
@@ -44,11 +51,16 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
         <IonGrid>
 
           <IonRow>
-            <IonCol size="12" sizeLg="6" style={{backgroundColor: "green", height: "46.5vh", marginBottom: "0.5vh"}}>
+            <IonCol size="12" sizeLg="6" style={{backgroundColor: "", height: "46.5vh", marginBottom: "0.5vh"}}>
               {/* Column 1 - Machine Overview */}
-              {props.storeModel.machines && props.storeModel.machines.map(machine => {
-                return <MachineItem machine={machine}/>
-              })}
+              <IonGrid>
+                <IonRow>
+                  {props.storeModel.machines && props.storeModel.machines.map(machine => {
+                    return <MachineItem key={machine.id} machine={machine} setSelectedMachine={setSelectedMachine}/>
+                  })}
+                </IonRow>
+
+              </IonGrid>
             </IonCol>
             <IonCol size="12" sizeLg="6" style={{backgroundColor: "red", height: "46.5vh", marginBottom: "0.5vh"}}>
               {/* Column 2 - Log Messages */}

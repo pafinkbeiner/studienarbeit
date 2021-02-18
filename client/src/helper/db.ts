@@ -4,7 +4,7 @@ export class Database{
 
     machines: Array<AMachine> = [];
 
-    set(machine: AMachine){
+    push(machine: AMachine){
         this.machines.push(machine);
     }
 
@@ -12,7 +12,7 @@ export class Database{
         this.machines.splice(this.machines.findIndex(m => m.id == machine.id), 1, machine);
     }
 
-    get(machineId: string): any{
+    get(machineId: string): AMachine | undefined{
         return this.machines.find(m => m.id == machineId);
     }
 
