@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import './Dashboard.css';
 import { AMachine, StoreModel } from '../../models/Store';
 import MachineItem from './MachineItem/MachineItem';
+import { DatabaseHandler } from '../../helper/db';
 
 const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 
@@ -12,11 +13,12 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 
 
   useEffect(() => {
-
+    let db = DatabaseHandler.getDbInstance();
     
+    // get 10 most recent log messages from db
     // subscribe to log messages of all machines
-    // 
-
+    
+    
 
     setTimeout(()=> {props.storeModel.setLoading(false)},1000)
 

@@ -1,9 +1,40 @@
-import lowdb, { AdapterSync } from "lowdb"
-import FileSync from "lowdb/adapters/FileSync"
+import { AMachine } from "../models/Store";
 
-const db = lowdb(new FileSync('db.json'));
+export class Database{
 
-db.defaults({machines: []})
-  .write()
+    machines: Array<AMachine> = [];
 
-export default db;
+    set(machine: AMachine){
+        this.machines.push(machine);
+    }
+
+    update(machine: AMachine){
+        this.machines.splice(this.machines.findIndex(m => m.id == machine.id), 1, machine);
+    }
+
+    get(machineId: string): any{
+        return this.machines.find(m => m.id == machineId);
+    }
+
+    getAll(){
+        return this.machines;
+    }
+
+    remove(machineId: string){
+        this.machines.splice(this.machines.findIndex(m => m.id == machineId), 1);
+    }
+}
+
+export class DatabaseHandler{
+
+    private static database: Database;
+
+    private constructor(){}
+
+    public static getDbInstance(): Database{
+        if(!DatabaseHandler.database){
+            DatabaseHandler.database = new Database();
+        }
+        return DatabaseHandler.database;
+    }
+}
