@@ -16,8 +16,8 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
 
   useEffect(() => {
     
-    console.log(props)
-    console.log(((window.location.href).toString().split("/")[(window.location.href).toString().split("/").length - 1]).toString());
+    const le = ((window.location.href).toString().split("/")[(window.location.href).toString().split("/").length - 1]).toString();
+    console.log(le);
     if(props.storeModel.machines.length > 0) setId(props.storeModel.machines[0].id.toString());
     console.log(id);
     console.log(props.storeModel.machines);
