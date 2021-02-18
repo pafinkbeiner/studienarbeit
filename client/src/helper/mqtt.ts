@@ -46,7 +46,7 @@ client.on("connect", () => {
 
     console.log("Connected sucessfully!")
 
-    // str.map(topic => client.subscribe(topic));
+    str.map(topic => client.subscribe(topic));
 
 })
 

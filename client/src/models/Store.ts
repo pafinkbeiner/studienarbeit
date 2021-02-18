@@ -6,6 +6,7 @@ export interface AMachine{
     id: string;
     name: string;
     sensors: Sensor[];
+    logs: string[];
 }
 
 export interface Sensor{
