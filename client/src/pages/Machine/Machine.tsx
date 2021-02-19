@@ -5,21 +5,36 @@ import './Machine.css';
 import Navbar from '../../components/Navbar/Navbar';
 import client from '../../helper/mqtt';
 import mqtt from "mqtt"
-import { AMachine, StoreModel } from '../../models/Store';
+import { AMachine, Sensor, StoreModel } from '../../models/Store';
 import AddSensor from './AddSensor/AddSensor';
 import redButton from "./Button_Icon_Red.svg"
 import blackButton from "./Button_Icon_Black.svg"
-import { settingsOutline, settingsSharp } from 'ionicons/icons';
+import { addOutline, addSharp, settingsOutline, settingsSharp } from 'ionicons/icons';
 import AddEs from './AddEs/AddEs';
 import { DatabaseHandler } from '../../helper/db';
+import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from 'recharts';
+import Table from '../../components/Table/Table';
 
 
 const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
 
+  // Allgemein
   const [id, setId] = useState("");
-  const [machine, setmachine] = useState<any>(undefined)
+  const [machine, setmachine] = useState<any>()
+  // 1
   const [configureEs, setConfigureEs] = useState(false);
+
+  // 2
   const [logs, setLogs] = useState<string[]>([]);
+
+  //3
+  const [configureSensor, setConfigureSensor] = useState(false);
+
+  // 3 + 4
+  const [selectedSensor, setSelectedSensor] = useState<Sensor>();
+
+  // 4
+  const [chartData, setChartData] = useState();
 
   useEffect(() => {
 
@@ -113,46 +128,89 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
 
               </IonGrid>
             </IonCol>
-            <IonCol size="12" sizeLg="6" style={{ backgroundColor: "grey", height: "46.5vh", marginBottom: "0.5vh", overflowY: "scroll"}}>
+            <IonCol size="12" sizeLg="6" style={{ backgroundColor: "", height: "46.5vh", marginBottom: "0.5vh", overflowY: "scroll" }}>
               {/* Column 2 - Log Messages */}
-              <IonList>
+              <h4>Logs</h4>
+              <IonList style={{height: "85%"}}>
                 {
                   logs && logs.map((log, index) => {
-                    console.log("asdadadasda",log.search("[INFO]"))
-                    if(log.search("[INFO]") != -1){
-                      return (<IonItem  key={index}><IonLabel ><p style={{color:"yellow"}}>{log}</p></IonLabel></IonItem>)
-                    }else if(log.search("[DEBUG]") != -1){
-                      return (<IonItem  key={index}><IonLabel><p style={{color:"green"}}>{log}</p></IonLabel></IonItem>)
-                    }else if(log.search("[ERROR]") != -1){
-                      return (<IonItem  key={index}><IonLabel><p style={{color:"red"}}>{log}</p></IonLabel></IonItem>)
-                    }else{
-                      return (<IonItem  key={index}><IonLabel><p style={{color:"white"}}>{log}</p></IonLabel></IonItem>)
+                    if (log.search("[INFO]") != -1) {
+                      return (<IonItem key={index}><IonLabel ><p style={{ color: "yellow" }}>{log}</p></IonLabel></IonItem>)
+                    } else if (log.search("[DEBUG]") != -1) {
+                      return (<IonItem key={index}><IonLabel><p style={{ color: "green" }}>{log}</p></IonLabel></IonItem>)
+                    } else if (log.search("[ERROR]") != -1) {
+                      return (<IonItem key={index}><IonLabel><p style={{ color: "red" }}>{log}</p></IonLabel></IonItem>)
+                    } else {
+                      return (<IonItem key={index}><IonLabel><p style={{ color: "white" }}>{log}</p></IonLabel></IonItem>)
                     }
                   })
                 }
-
-                <IonItem>
-                  <IonLabel>askldaslkd</IonLabel>
-                </IonItem>
-                <IonItem>
-                  <IonLabel>askldaslkd</IonLabel>
-                </IonItem>
-
               </IonList>
             </IonCol>
 
-            <IonCol size="12" sizeLg="6" style={{ backgroundColor: "blue", height: "46vh" }}>
+            <IonCol size="12" sizeLg="6" style={{ height: "46vh" }}>
               {/* Column 3 - If Machine Clicked*/}
+              <div style={{display: "flex", flexDirection: "row"}}>
+                <h4>Sensors</h4>
+                <div style={{ marginLeft:"10px"}}>
+                  <IonButton onClick={() => setConfigureSensor(true)} ><IonIcon md={addSharp} ios={addOutline}></IonIcon></IonButton>
+                </div>
+              </div>
+
+              <IonGrid style={{backgroundColor: "#1E1E1E"}}>
+                <IonRow>
+                  <IonCol><b>name</b></IonCol>
+                  <IonCol><b>min</b></IonCol>
+                  <IonCol><b>max</b></IonCol>
+                  <IonCol><b>value</b></IonCol>
+                  <IonCol><b>path</b></IonCol>
+                  <IonCol><b>show</b></IonCol>
+                  <IonCol><b>edit</b></IonCol>
+                </IonRow>
+
+                {machine &&
+                  <IonRow>
+                    <IonCol style={{overflowY: "hidden"}}>ES</IonCol>
+                    <IonCol style={{overflowY: "hidden"}}>N/A</IonCol>
+                    <IonCol style={{overflowY: "hidden"}}>N/A</IonCol>
+                    <IonCol style={{overflowY: "hidden"}}>N/A</IonCol>
+                    <IonCol style={{overflowY: "hidden"}}>{machine.es}</IonCol>
+                    <IonCol style={{overflowY: "hidden"}}>N/A</IonCol>
+                    <IonCol style={{overflowY: "hidden"}}><IonButton style={{width: "90%"}}>edit</IonButton></IonCol>
+                  </IonRow>
+                }
+
+                {machine &&
+                  machine.sensors.map((sensor: Sensor) => {
+                    return (
+                      <IonRow>
+                        <IonCol style={{overflowY: "hidden"}}>{sensor.name}</IonCol>
+                        <IonCol style={{overflowY: "hidden"}}>{sensor.min}</IonCol>
+                        <IonCol style={{overflowY: "hidden"}}>{sensor.max}</IonCol>
+                        <IonCol style={{overflowY: "hidden"}}>{sensor.value}</IonCol>
+                        <IonCol style={{overflowY: "hidden"}}><IonButton style={{width: "90%"}}>show</IonButton></IonCol>
+                        <IonCol style={{overflowY: "hidden"}}><IonButton style={{width: "90%"}}>edit</IonButton></IonCol>
+                      </IonRow>
+                    )
+                  })
+                }
+
+              </IonGrid>
             </IonCol>
-            <IonCol size="12" sizeLg="6" style={{ backgroundColor: "yellow", height: "46vh" }}>
+            <IonCol size="12" sizeLg="6" style={{ backgroundColor: "#1E1E1E", height: "46vh" }}>
               {/* Column 4 - Machine Overview */}
+              {/* TEMP DEBUG TODO */}
+              { selectedSensor==undefined && 
+              
+                <>
+                  <Table />
+                </>
+              
+              }
             </IonCol>
           </IonRow>
 
         </IonGrid>
-
-        {/* <AddSensor addSensor={props.storeModel.addSensor}/> */}
-        <IonButton onClick={trigger}>Logs</IonButton>
       </IonContent>
     </IonPage>
   );
