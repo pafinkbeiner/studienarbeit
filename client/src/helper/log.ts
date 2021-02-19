@@ -1,11 +1,10 @@
-import { AMachine } from "../models/Store";
-
 export class Log{
 
     logs: Array<string> = [];
 
-    add(log: string){
+    log(log: string){
         this.logs.push(log);
+        console.log("LOG HANDLER: ",log)
     }
 }
 

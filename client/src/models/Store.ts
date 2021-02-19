@@ -7,6 +7,7 @@ export interface AMachine{
     name: string;
     sensors: Sensor[];
     logs: string[];
+    es: string;
 }
 
 export interface Sensor{
@@ -29,4 +30,5 @@ export interface StoreModel{
     removeMachine: (machineId: string) => void;
     addSensor: (machineId: string, sensor: Sensor) => void;
     removeSensor: (machineId: string, sensorId: string) => void;
+    addEs: (machineId: string, es: string) => void;
 }

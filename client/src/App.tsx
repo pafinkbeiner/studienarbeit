@@ -38,8 +38,7 @@ const App: React.FC = (props) => {
   const db = DatabaseHandler.getDbInstance();
 
   // State Management
-  const [machines, setMachines] = useState<AMachine[]>([{name: "Machine 1", id:"789jf824j29f8j2", sensors: [], logs: ["log1", "log"]}, 
-                                                        {name: "Machine 2", id:"789jf82asdasdasdj2", sensors: [], logs: ["log1", "log3"]}]);
+  const [machines, setMachines] = useState<AMachine[]>([]);
   const [loading, setLoading ] = useState(true);
 
   // Machine Opertations
@@ -48,13 +47,13 @@ const App: React.FC = (props) => {
     db.push(machine);
   }
   const removeMachine = (machineId: string) => {
-    setMachines(machines.filter(machine => machine.id != machineId));
+    setMachines(machines.filter(machine => machine.id !== machineId));
     db.remove(machineId);
   }
 
   // Sensor Operations
   const addSensor = (machineId: string, sensor: Sensor) => {
-    const machine = machines.find(machine => machine.id == machineId);
+    const machine = machines.find(machine => machine.id === machineId);
     if(machine != undefined){
       machine.sensors.push(sensor);
       removeMachine(machine.id);
@@ -62,13 +61,27 @@ const App: React.FC = (props) => {
     }
   }
   const removeSensor = (machineId: string, sensorId: string) => {
-    const machine = machines.find(machine => machine.id == machineId);
+    const machine = machines.find(machine => machine.id === machineId);
     if(machine != undefined){
-      machine.sensors = machine.sensors.filter(sensor => sensor.id != sensorId);
+      machine.sensors = machine.sensors.filter(sensor => sensor.id !== sensorId);
       removeMachine(machine.id);
       addMachine(machine);
     }
   }
+
+    // Es Operations
+    const addEs = (machineId: string, es: string) => {
+      setMachines( (state: AMachine[]) => {
+        let newState = state;
+        let machine = newState.find(m => m.id === machineId)
+        if(machine !== undefined){
+          machine.es = es;
+          return [...state.filter(m => m.id !== machineId),  machine]; 
+        }else{
+          return state;
+        }
+      })
+    }
 
   const StoreModel: StoreModel = {
     machines,
@@ -78,8 +91,19 @@ const App: React.FC = (props) => {
     addMachine,
     removeMachine,
     addSensor,
-    removeSensor
+    removeSensor,
+    addEs
 }
+
+  //DEBUG
+  useEffect(() => {
+    //TEMp load machines to db
+    machines.map(m => db.push(m))
+    if(machines.length < 1){
+      setMachines([{name: "Machine 1", id:"789jf824j29f8j2", sensors: [], logs: ["log1", "log"], es:"/test"}, 
+      {name: "Machine 2", id:"789jf82asdasdasdj2", sensors: [], logs: ["log1", "[INFO] System started"], es: ""}])
+    } 
+  })
 
   return (
     <IonApp>
