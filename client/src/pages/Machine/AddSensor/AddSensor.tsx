@@ -1,86 +1,147 @@
 import {
-    IonButton,
-    IonButtons,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonCol,
-    IonContent,
-    IonGrid,
-    IonHeader,
-    IonIcon,
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonMenuButton,
-    IonModal,
-    IonPage,
-    IonRow,
-    IonTitle,
-    IonToolbar,
-  } from "@ionic/react";
-  import { v4 as uuidv4 } from 'uuid';
-  import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-  import { pin, walk, warning, wifi, wine } from "ionicons/icons";
-  import { AMachine, Sensor } from "../../../models/Store";
-  
-  
-  const AddMachine: React.FC<{addSensor: (machineId: string, sensor: Sensor) => void}> = (props) => {
-    const [modal, setModal] = useState(false);
-  
-    const [machineName, setMachineName] = useState("");
-    const [machineSensors, setMachineSensors] = useState([]);
-  
-    return (
-      <>
-        <IonModal isOpen={modal}>
-          <IonGrid>
-            <IonRow>
-              <IonCol>
-                <h5>Create a new Machine</h5>
-              </IonCol>
-            </IonRow>
-  
-            <IonRow>
-              <IonCol>
-                <IonItem>
-                  <IonLabel position="fixed">Name</IonLabel>
-                  <IonInput
-                    value={machineName}
-                    type="text"
-                    placeholder="Enter Input"
-                    onIonChange={(e) => setMachineName(e.detail.value!)}
-                  ></IonInput>
-                </IonItem>
-              </IonCol>
-            </IonRow>
-  
-            <IonRow>
-              <IonCol size="6">
-                <IonButton onClick={() => setModal(false)}>Close</IonButton>
-              </IonCol>
-  
-              <IonCol size="6">
-                {/* <IonButton onClick={() => props.addSensor({
-                    name: machineName,
-                    id: uuidv4(),
-                    sensors: machineSensors
-                })}>Add</IonButton> */}
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </IonModal>
-  
-        <IonCard style={{height: "100%"}} onClick={() => setModal(true)}>
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonMenuButton,
+  IonModal,
+  IonPage,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
+import { v4 as uuidv4 } from 'uuid';
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { pin, walk, warning, wifi, wine } from "ionicons/icons";
+import { AMachine, Sensor } from "../../../models/Store";
+
+
+const AddMachine: React.FC<{ machineId: string, configureSensor: boolean, setConfigureSensor: (bol: boolean) => void, addSensor: (machineId: string, sensor: Sensor) => void }> = (props) => {
+
+  const [newSensor, setNewSensor] = useState<Sensor>({ id: "", name: "", max: "", min: "", values: [], topic: ""});
+
+  return (
+    <>
+      <IonModal isOpen={props.configureSensor}>
+        <IonGrid>
+          <IonRow>
+            <IonCol>
+              <h5>Add a new Sensor</h5>
+            </IonCol>
+          </IonRow>
+
+          <IonRow>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="fixed">Name</IonLabel>
+                <IonInput
+                  value={newSensor.name}
+                  type="text"
+                  placeholder="Enter Input"
+                  onIonChange={(e) => setNewSensor((state: Sensor) => {
+                    return {
+                      ...state,
+                      name: e.detail.value!
+                    }
+                  })}
+                ></IonInput>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+
+          <IonRow>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="fixed">min</IonLabel>
+                <IonInput
+                  value={newSensor.min}
+                  type="number"
+                  placeholder="Enter Input"
+                  onIonChange={(e) => setNewSensor((state: Sensor) => {
+                    return {
+                      ...state,
+                      min: e.detail.value!
+                    }
+                  })}
+                ></IonInput>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+
+          <IonRow>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="fixed">max</IonLabel>
+                <IonInput
+                  value={newSensor.max}
+                  type="number"
+                  placeholder="Enter Input"
+                  onIonChange={(e) => setNewSensor((state: Sensor) => {
+                    return {
+                      ...state,
+                      max: e.detail.value!
+                    }
+                  })}
+                ></IonInput>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+
+          <IonRow>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="fixed">topic</IonLabel>
+                <IonInput
+                  value={newSensor.topic}
+                  type="text"
+                  placeholder="Enter Input"
+                  onIonChange={(e) => setNewSensor((state: Sensor) => {
+                    return {
+                      ...state,
+                      topic: e.detail.value!
+                    }
+                  })}
+                ></IonInput>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+
+          <IonRow>
+            <IonCol size="6">
+              <IonButton onClick={() => {
+                props.setConfigureSensor(false);
+                setNewSensor({ id: "", name: "", max: "", min: "", values: [], topic: ""});
+              }}>Close</IonButton>
+            </IonCol>
+
+            <IonCol size="6">
+              <IonButton onClick={() => {
+                props.addSensor(props.machineId, { ...newSensor, id: uuidv4() });
+                props.setConfigureSensor(false);
+              }}>Add</IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonModal>
+
+      {/* <IonCard style={{height: "100%"}} onClick={() => setModal(true)}>
           <IonCardContent className="ion-text-center" style={{height: "100%"}}>
               <h1 style={{color: "lightgrey", fontSize:"7rem"}}>+</h1>
           </IonCardContent>
-        </IonCard>
-      </>
-    );
-  };
-  
-  export default AddMachine;
-  
+        </IonCard> */}
+    </>
+  );
+};
+
+export default AddMachine;

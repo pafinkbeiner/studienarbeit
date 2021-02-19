@@ -131,7 +131,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
             <IonCol size="12" sizeLg="6" style={{ backgroundColor: "", height: "46.5vh", marginBottom: "0.5vh", overflowY: "scroll" }}>
               {/* Column 2 - Log Messages */}
               <h4>Logs</h4>
-              <IonList style={{height: "85%"}}>
+              <IonList style={{ height: "85%" }}>
                 {
                   logs && logs.map((log, index) => {
                     if (log.search("[INFO]") != -1) {
@@ -150,14 +150,20 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
 
             <IonCol size="12" sizeLg="6" style={{ height: "46vh" }}>
               {/* Column 3 - If Machine Clicked*/}
-              <div style={{display: "flex", flexDirection: "row"}}>
+              <div style={{ display: "flex", flexDirection: "row" }}>
                 <h4>Sensors</h4>
-                <div style={{ marginLeft:"10px"}}>
+                <div style={{ marginLeft: "10px" }}>
                   <IonButton onClick={() => setConfigureSensor(true)} ><IonIcon md={addSharp} ios={addOutline}></IonIcon></IonButton>
                 </div>
               </div>
 
-              <IonGrid style={{backgroundColor: "#1E1E1E"}}>
+              {configureSensor && <AddSensor  machineId={machine.id} 
+                                              configureSensor={configureSensor} 
+                                              setConfigureSensor={setConfigureSensor} 
+                                              addSensor={props.storeModel.addSensor}>
+                                  </AddSensor>}
+
+              <IonGrid style={{ backgroundColor: "#1E1E1E" }}>
                 <IonRow>
                   <IonCol><b>name</b></IonCol>
                   <IonCol><b>min</b></IonCol>
@@ -170,13 +176,13 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
 
                 {machine &&
                   <IonRow>
-                    <IonCol style={{overflowY: "hidden"}}>ES</IonCol>
-                    <IonCol style={{overflowY: "hidden"}}>N/A</IonCol>
-                    <IonCol style={{overflowY: "hidden"}}>N/A</IonCol>
-                    <IonCol style={{overflowY: "hidden"}}>N/A</IonCol>
-                    <IonCol style={{overflowY: "hidden"}}>{machine.es}</IonCol>
-                    <IonCol style={{overflowY: "hidden"}}>N/A</IonCol>
-                    <IonCol style={{overflowY: "hidden"}}><IonButton style={{width: "90%"}}>edit</IonButton></IonCol>
+                    <IonCol style={{ overflowY: "hidden" }}>ES</IonCol>
+                    <IonCol style={{ overflowY: "hidden" }}>N/A</IonCol>
+                    <IonCol style={{ overflowY: "hidden" }}>N/A</IonCol>
+                    <IonCol style={{ overflowY: "hidden" }}>N/A</IonCol>
+                    <IonCol style={{ overflowY: "hidden" }}>{machine.es}</IonCol>
+                    <IonCol style={{ overflowY: "hidden" }}><IonButton disabled={true} style={{ width: "80%" }}>show</IonButton></IonCol>
+                    <IonCol style={{ overflowY: "hidden" }}><IonButton style={{ width: "80%" }}>edit</IonButton></IonCol>
                   </IonRow>
                 }
 
@@ -184,12 +190,13 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                   machine.sensors.map((sensor: Sensor) => {
                     return (
                       <IonRow>
-                        <IonCol style={{overflowY: "hidden"}}>{sensor.name}</IonCol>
-                        <IonCol style={{overflowY: "hidden"}}>{sensor.min}</IonCol>
-                        <IonCol style={{overflowY: "hidden"}}>{sensor.max}</IonCol>
-                        <IonCol style={{overflowY: "hidden"}}>{sensor.value}</IonCol>
-                        <IonCol style={{overflowY: "hidden"}}><IonButton style={{width: "90%"}}>show</IonButton></IonCol>
-                        <IonCol style={{overflowY: "hidden"}}><IonButton style={{width: "90%"}}>edit</IonButton></IonCol>
+                        <IonCol style={{ overflowY: "hidden" }}>{sensor.name}</IonCol>
+                        <IonCol style={{ overflowY: "hidden" }}>{sensor.min}</IonCol>
+                        <IonCol style={{ overflowY: "hidden" }}>{sensor.max}</IonCol>
+                        <IonCol style={{ overflowY: "hidden" }}>N/A</IonCol>
+                        <IonCol style={{ overflowY: "hidden" }}>{sensor.topic}</IonCol>
+                        <IonCol style={{ overflowY: "hidden" }}><IonButton style={{ width: "80%" }}>show</IonButton></IonCol>
+                        <IonCol style={{ overflowY: "hidden" }}><IonButton style={{ width: "80%" }}>edit</IonButton></IonCol>
                       </IonRow>
                     )
                   })
@@ -200,12 +207,12 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
             <IonCol size="12" sizeLg="6" style={{ backgroundColor: "#1E1E1E", height: "46vh" }}>
               {/* Column 4 - Machine Overview */}
               {/* TEMP DEBUG TODO */}
-              { selectedSensor==undefined && 
-              
+              {selectedSensor == undefined &&
+
                 <>
                   <Table />
                 </>
-              
+
               }
             </IonCol>
           </IonRow>

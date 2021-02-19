@@ -15,8 +15,7 @@ export interface Sensor{
     name: string;
     min: any;
     max: any;
-    value: any;
-    pvalue: any;
+    values: Array<{value: string, date: string}>;
     topic: string;
 }
 
