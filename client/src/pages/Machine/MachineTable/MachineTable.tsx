@@ -1,4 +1,3 @@
-import "./styles.css";
 import React, { useEffect, useState } from "react";
 import {
   LineChart,
@@ -9,11 +8,10 @@ import {
   Tooltip,
   Legend
 } from "recharts";
-import { Sensor } from "../../../models/Store";
+import { AMachine, Sensor } from "../../../models/Store";
 import client from "../../../helper/mqtt";
 import mqtt from "mqtt"
 import { DatabaseHandler } from "../../../helper/db";
-import { table } from "console";
 
 const data = [
   {
@@ -46,7 +44,7 @@ const data = [
   }
 ];
 
-const MachineTable = (props: {selectedSensor: Sensor, machineId: string}) => {
+const MachineTable = (props: {selectedSensor: Sensor, machine: AMachine}) => {
 
     let db = DatabaseHandler.getDbInstance();
 
@@ -56,17 +54,24 @@ const MachineTable = (props: {selectedSensor: Sensor, machineId: string}) => {
     const [tableData, setTableData] = useState<Array<{date: string, value: number}>>([])
 
     const refreshTabelData = (data: {date: string, value: number}) => {
-        // get recent data from params
-        // put old data into the newest db position 
-        db.get(props.machineId)?.sensors.find(s => s.id == props.selectedSensor.id)?.values.push(tableData[tableData.length - 1]);
+
+      // get sensor values from db 
+
+      // sort by date to get newest 
+
+      // load sensor values to state
+
+        // // get recent data from params
+        // // put old data into the newest db position 
+        // db.get(props.machineId)?.sensors.find(s => s.id == props.selectedSensor.id)?.values.push(tableData[tableData.length - 1]);
         
-        //remove first element from tableData TODO eventuell add -1 at the end when there occurs an error
-        setTableData(state => state.slice(1, state.length))
+        // //remove first element from tableData TODO eventuell add -1 at the end when there occurs an error
+        // setTableData(state => state.slice(1, state.length))
         
-        // put recent data into newsest table position
-        setTableData((state: Array<{date: string, value: number}>) => {
-            return [ ...state, data ];
-        })
+        // // put recent data into newsest table position
+        // setTableData((state: Array<{date: string, value: number}>) => {
+        //     return [ ...state, data ];
+        // })
 
     }
 
@@ -74,7 +79,7 @@ const MachineTable = (props: {selectedSensor: Sensor, machineId: string}) => {
   useEffect(() => {
 
       // load content from db to table 10 values
-    const sensor = db.get(props.machineId)?.sensors.find(s => s.id == props.selectedSensor.id);
+    const sensor = db.get(props.machine.id)?.sensors.find(s => s.id == props.selectedSensor.id);
     
     if(sensor != undefined){
         setTableData(sensor.values.slice(0,9));
@@ -83,12 +88,18 @@ const MachineTable = (props: {selectedSensor: Sensor, machineId: string}) => {
 
     client.on('message', (topic: string, payload: Buffer, packet: mqtt.Packet) => {
 
+      // Push value to db 
+      // and call method to refresh the table data
+
         if(topic.search(props.selectedSensor.topic) !== -1){
             const sensorValue = {
                 date: Date.now().toLocaleString(),
                 value: Number.parseInt(payload.toString())
             }
-            refreshTabelData(sensorValue);
+            // Add new Sensor value to database
+            const newMachine = props.machine;
+            newMachine.sensors.find(s => s.id == props.selectedSensor.id)?.values.push(sensorValue);
+            db.update(newMachine);
         } 
     });
   })
@@ -97,7 +108,7 @@ const MachineTable = (props: {selectedSensor: Sensor, machineId: string}) => {
     <LineChart
       width={500}
       height={300}
-      data={data}
+      data={tableData}
       margin={{
         top: 5,
         right: 30,
@@ -113,10 +124,9 @@ const MachineTable = (props: {selectedSensor: Sensor, machineId: string}) => {
       <Line
         type="monotone"
         dataKey="value"
-        stroke="#8884d8"
+        stroke="#33cc99"
         activeDot={{ r: 8 }}
       />
-      <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
     </LineChart>
   );
 }

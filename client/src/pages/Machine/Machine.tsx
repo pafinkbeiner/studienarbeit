@@ -207,11 +207,10 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
             </IonCol>
             <IonCol size="12" sizeLg="6" style={{ backgroundColor: "#1E1E1E", height: "46vh" }}>
               {/* Column 4 - Machine Overview */}
-              {/* TEMP DEBUG TODO */}
-              {selectedSensor == undefined &&
+              {selectedSensor &&
 
                 <>
-                  <MachineTable machineId={machine.id} selectedSensor={selectedSensor}/>
+                  <MachineTable machine={machine} selectedSensor={selectedSensor}/>
                 </>
 
               }
