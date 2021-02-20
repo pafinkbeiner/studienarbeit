@@ -14,6 +14,7 @@ import AddEs from './AddEs/AddEs';
 import { DatabaseHandler } from '../../helper/db';
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from 'recharts';
 import Table from '../../components/Table/Table';
+import MachineTable from './MachineTable/MachineTable';
 
 
 const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
@@ -157,7 +158,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 </div>
               </div>
 
-              {configureSensor && <AddSensor  machineId={machine.id} 
+              {(configureSensor == true) && <AddSensor  machineId={machine.id} 
                                               configureSensor={configureSensor} 
                                               setConfigureSensor={setConfigureSensor} 
                                               addSensor={props.storeModel.addSensor}>
@@ -210,7 +211,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
               {selectedSensor == undefined &&
 
                 <>
-                  <Table />
+                  <MachineTable machineId={machine.id} selectedSensor={selectedSensor}/>
                 </>
 
               }
