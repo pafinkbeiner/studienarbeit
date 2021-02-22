@@ -15,6 +15,7 @@ import { DatabaseHandler } from '../../helper/db';
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from 'recharts';
 import Table from '../../components/Table/Table';
 import MachineTable from './MachineTable/MachineTable';
+import EditSensor from './EditSensor/EditSensor';
 
 
 const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
@@ -29,10 +30,15 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
   const [logs, setLogs] = useState<string[]>([]);
 
   //3
+  // Add Sensor
   const [configureSensor, setConfigureSensor] = useState(false);
+  // Edit Sensor
+  const [editSensor, setEditSensor] = useState<boolean>(false);
+  const [editSensorSelected, setEditSensorSelected] = useState<Sensor>();
 
   // 3 + 4
   const [selectedSensor, setSelectedSensor] = useState<Sensor>();
+
 
   // 4
   const [chartData, setChartData] = useState();
@@ -82,7 +88,6 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
   const trigger = () => {
     client.subscribe(`machines/+/logs`);
   };
-
 
   return (
     <IonPage>
@@ -197,10 +202,24 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                         <IonCol style={{ overflowY: "hidden" }}>N/A</IonCol>
                         <IonCol style={{ overflowY: "hidden" }}>{sensor.topic}</IonCol>
                         <IonCol style={{ overflowY: "hidden" }}><IonButton style={{ width: "80%" }}>show</IonButton></IonCol>
-                        <IonCol style={{ overflowY: "hidden" }}><IonButton style={{ width: "80%" }}>edit</IonButton></IonCol>
+                        <IonCol style={{ overflowY: "hidden" }}><IonButton onClick={() => {
+                          setEditSensorSelected(sensor);
+                          setEditSensor(true);
+                        }} style={{ width: "80%" }}>edit</IonButton></IonCol>
                       </IonRow>
                     )
                   })
+                }
+
+                {
+                  (editSensorSelected && editSensor == true) && <EditSensor 
+                    machineId={machine.id}
+                    editSensor={editSensor} 
+                    setEditSensor={setEditSensor} 
+                    addSensor={props.storeModel.addSensor}
+                    removeSensor={props.storeModel.removeSensor}
+                    selectedSensor={editSensorSelected} 
+                  />
                 }
 
               </IonGrid>
