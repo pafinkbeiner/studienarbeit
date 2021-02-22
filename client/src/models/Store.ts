@@ -30,4 +30,6 @@ export interface StoreModel{
     addSensor: (machineId: string, sensor: Sensor) => void;
     removeSensor: (machineId: string, sensorId: string) => void;
     addEs: (machineId: string, es: string) => void;
+    addLog: (machineId: string, log: string) => void;
+    addSensorValue: (machineId: string, sensorId: string, value: string) => void;
 }

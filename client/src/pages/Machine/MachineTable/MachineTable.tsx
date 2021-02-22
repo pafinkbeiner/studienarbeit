@@ -13,40 +13,7 @@ import client from "../../../helper/mqtt";
 import mqtt from "mqtt"
 import { DatabaseHandler } from "../../../helper/db";
 
-const data = [
-  {
-    date: "Page A",
-    value: 4000
-  },
-  {
-    date: "Page B",
-    value: 3000
-  },
-  {
-    date: "Page C",
-    value: 2000
-  },
-  {
-    date: "Page D",
-    value: 2780
-  },
-  {
-    date: "Page E",
-    value: 1890
-  },
-  {
-    date: "Page F",
-    value: 2390
-  },
-  {
-    date: "Page G",
-    value: 3490
-  }
-];
-
-const MachineTable = (props: {selectedSensor: Sensor, machine: AMachine}) => {
-
-    let db = DatabaseHandler.getDbInstance();
+const MachineTable = (props: {selectedSensor: Sensor, machineId: string, addSensorValue: (machineId: string, sensorId: string, value: string) => void}) => {
 
     const [connectionStatus, setConnectionStatus] = React.useState(false);
     const [messages, setMessages] = React.useState("");
@@ -78,31 +45,18 @@ const MachineTable = (props: {selectedSensor: Sensor, machine: AMachine}) => {
   //const data = props.selectedSensor.values;
   useEffect(() => {
 
-      // load content from db to table 10 values
-    const sensor = db.get(props.machine.id)?.sensors.find(s => s.id == props.selectedSensor.id);
-    
-    if(sensor != undefined){
-        setTableData(sensor.values.slice(0,9));
-    }
+    // load values from sensor into table
+    setTableData(props.selectedSensor.values.slice(0,9));
 
-
+    // Get new values from mqtt
     client.on('message', (topic: string, payload: Buffer, packet: mqtt.Packet) => {
-
-      // Push value to db 
-      // and call method to refresh the table data
-
-        if(topic.search(props.selectedSensor.topic) !== -1){
-            const sensorValue = {
-                date: Date.now().toLocaleString(),
-                value: Number.parseInt(payload.toString())
-            }
-            // Add new Sensor value to database
-            const newMachine = props.machine;
-            newMachine.sensors.find(s => s.id == props.selectedSensor.id)?.values.push(sensorValue);
-            db.update(newMachine);
+        if(topic == `machine/${props.machineId}/data/${props.selectedSensor.topic}`){
+          props.addSensorValue(props.machineId, props.selectedSensor.id, payload.toString());
+          // TODO Check if sensor value is automatically changes the state and refreshes the table
         } 
     });
-  })
+    // Todo change dependency
+  }, [props.selectedSensor])
 
   return (
     <LineChart

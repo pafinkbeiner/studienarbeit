@@ -83,6 +83,31 @@ const App: React.FC = (props) => {
       })
     }
 
+    const addLog = (machineId: string, log: string) => {
+      const machine = machines.find(machine => machine.id === machineId);
+      if(machine != undefined){
+        machine.logs.push(log);
+        removeMachine(machine.id);
+        addMachine(machine);
+      }
+    }
+
+    const addSensorValue = (machineId: string, sensorId: string, value: string) => {
+      setMachines( (state: AMachine[]) => {
+        let newState = state;
+        let machine = newState.find(m => m.id === machineId)
+        if(machine !== undefined){
+          machine.sensors.find(s => s.id == sensorId)?.values.push({
+            value: Number.parseInt(value),
+            date: Date.now().toLocaleString()
+          })
+          return [...state.filter(m => m.id !== machineId),  machine]; 
+        }else{
+          return state;
+        }
+      })
+    }
+
   const StoreModel: StoreModel = {
     machines,
     loading,
@@ -92,7 +117,9 @@ const App: React.FC = (props) => {
     removeMachine,
     addSensor,
     removeSensor,
-    addEs
+    addEs,
+    addLog,
+    addSensorValue
 }
 
   //DEBUG

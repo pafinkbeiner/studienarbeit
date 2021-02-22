@@ -9,7 +9,8 @@ import { AMachine, Sensor, StoreModel } from '../../models/Store';
 import AddSensor from './AddSensor/AddSensor';
 import redButton from "./Button_Icon_Red.svg"
 import blackButton from "./Button_Icon_Black.svg"
-import { addOutline, addSharp, settingsOutline, settingsSharp } from 'ionicons/icons';
+import greenButton from "./Button_Icon_Green.svg"
+import { addOutline, addSharp, refreshCircle, refreshOutline, refreshSharp, settingsOutline, settingsSharp } from 'ionicons/icons';
 import AddEs from './AddEs/AddEs';
 import { DatabaseHandler } from '../../helper/db';
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from 'recharts';
@@ -22,7 +23,9 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
 
   // Allgemein
   const [id, setId] = useState("");
-  const [machine, setmachine] = useState<any>()
+  const [machine, setmachine] = useState<any>();
+  const [mqttStatus, setMqttStatus] = useState<boolean>(false);
+
   // 1
   const [configureEs, setConfigureEs] = useState(false);
 
@@ -38,10 +41,6 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
 
   // 3 + 4
   const [selectedSensor, setSelectedSensor] = useState<Sensor>();
-
-
-  // 4
-  const [chartData, setChartData] = useState();
 
   useEffect(() => {
 
@@ -89,6 +88,45 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
     client.subscribe(`machines/+/logs`);
   };
 
+  const startMqttTransmission = () => {
+    // Turn icon green
+    setMqttStatus(true);
+    // subscribe to logs
+    client.subscribe(`machines/${machine.name}/logs`);
+    // subscribe to sensors
+    machine.sensors.map((s: Sensor) => {
+      // TODO Hier eventuell direkt die topic einbinden
+      client.subscribe(`machines/${machine.name}/data/${s.topic}`)
+    })
+
+    // Say client how he should handle the requests
+    // MQTT subscribtions
+    client.on(
+      "message",
+      (topic: string, payload: Buffer, packet: mqtt.Packet) => {
+        // check if topic is for log messages
+        if (topic == `machines/${machine.name}/logs`) props.storeModel.addLog(machine.id, payload.toString())
+
+        console.log(payload.toString() + "topic: " + topic);
+      }
+    );
+  }
+
+  const stopMqttTransmission = () => {
+    //turn icon red
+    setMqttStatus(false);
+    // unsubscribe to mqtt data 
+    // subscribe to logs
+    client.unsubscribe(`machines/${machine.name}/logs`);
+    // subscribe to sensors
+    machine.sensors.map((s: Sensor) => {
+      // TODO Hier eventuell direkt die topic einbinden
+      client.unsubscribe(`machines/${machine.name}/data/${s.topic}`)
+    })
+    // Remove all listeners
+    client.removeAllListeners();
+  }
+
   return (
     <IonPage>
 
@@ -101,8 +139,6 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
           </IonToolbar>
         </IonHeader>
 
-
-
         <IonGrid>
 
           <IonRow>
@@ -114,7 +150,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 </IonRow>
                 <IonRow>
                   <IonCol size="10">
-                    <img style={{ width: "500px" }} src="https://www.arburg.com/fileadmin/redaktion/bilder/vollbild_650x320px/144999_920s.jpg" />
+                    <img style={{ width: "400px" }} src="https://www.arburg.com/fileadmin/redaktion/bilder/vollbild_650x320px/144999_920s.jpg" />
                   </IonCol>
                   <IonCol>
                     <div className="stop-container">
@@ -131,7 +167,27 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                     </div>
                   </IonCol>
                 </IonRow>
+                <IonRow>
+                  <IonButton onClick={() => startMqttTransmission()}>Start MQTT</IonButton>
+                  <IonButton onClick={() => stopMqttTransmission()}>Stop MQTT</IonButton>
+                  <p style={{ marginLeft: "10px" }}>MQTT transmission status: </p>
+                  <div style={{ display: "flex", justifyContent: "center", alignContent: "center", marginLeft: "15px", paddingTop: "9px" }}>
 
+                    {
+                      (mqttStatus == true) ?
+                        <img src={greenButton} style={{ width: "30px", height: "30px" }}></img>
+                        :
+                        <img src={redButton} style={{ width: "30px", height: "30px" }}></img>
+                    }
+
+                    <IonIcon onClick={() => {
+                      stopMqttTransmission();
+                      startMqttTransmission();
+                    }} style={{ marginLeft: "15px", marginTop: "6px" }} md={refreshOutline} ios={refreshSharp}></IonIcon>
+
+                  </div>
+
+                </IonRow>
               </IonGrid>
             </IonCol>
             <IonCol size="12" sizeLg="6" style={{ backgroundColor: "", height: "46.5vh", marginBottom: "0.5vh", overflowY: "scroll" }}>
@@ -163,11 +219,11 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 </div>
               </div>
 
-              {(configureSensor == true) && <AddSensor  machineId={machine.id} 
-                                              configureSensor={configureSensor} 
-                                              setConfigureSensor={setConfigureSensor} 
-                                              addSensor={props.storeModel.addSensor}>
-                                  </AddSensor>}
+              {(configureSensor == true) && <AddSensor machineId={machine.id}
+                configureSensor={configureSensor}
+                setConfigureSensor={setConfigureSensor}
+                addSensor={props.storeModel.addSensor}>
+              </AddSensor>}
 
               <IonGrid style={{ backgroundColor: "#1E1E1E" }}>
                 <IonRow>
@@ -195,13 +251,15 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 {machine &&
                   machine.sensors.map((sensor: Sensor) => {
                     return (
-                      <IonRow>
+                      <IonRow key={sensor.id}>
                         <IonCol style={{ overflowY: "hidden" }}>{sensor.name}</IonCol>
                         <IonCol style={{ overflowY: "hidden" }}>{sensor.min}</IonCol>
                         <IonCol style={{ overflowY: "hidden" }}>{sensor.max}</IonCol>
                         <IonCol style={{ overflowY: "hidden" }}>N/A</IonCol>
                         <IonCol style={{ overflowY: "hidden" }}>{sensor.topic}</IonCol>
-                        <IonCol style={{ overflowY: "hidden" }}><IonButton style={{ width: "80%" }}>show</IonButton></IonCol>
+                        <IonCol style={{ overflowY: "hidden" }}><IonButton onClick={() => {
+                          setSelectedSensor(sensor);
+                        }} style={{ width: "80%" }}>show</IonButton></IonCol>
                         <IonCol style={{ overflowY: "hidden" }}><IonButton onClick={() => {
                           setEditSensorSelected(sensor);
                           setEditSensor(true);
@@ -212,13 +270,13 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 }
 
                 {
-                  (editSensorSelected && editSensor == true) && <EditSensor 
+                  (editSensorSelected && editSensor == true) && <EditSensor
                     machineId={machine.id}
-                    editSensor={editSensor} 
-                    setEditSensor={setEditSensor} 
+                    editSensor={editSensor}
+                    setEditSensor={setEditSensor}
                     addSensor={props.storeModel.addSensor}
                     removeSensor={props.storeModel.removeSensor}
-                    selectedSensor={editSensorSelected} 
+                    selectedSensor={editSensorSelected}
                   />
                 }
 
@@ -229,7 +287,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
               {selectedSensor &&
 
                 <>
-                  <MachineTable machine={machine} selectedSensor={selectedSensor}/>
+                  <MachineTable machineId={machine.id} selectedSensor={selectedSensor} addSensorValue={props.storeModel.addSensorValue} />
                 </>
 
               }
