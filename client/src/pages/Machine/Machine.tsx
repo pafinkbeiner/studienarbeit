@@ -53,21 +53,6 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
 
   })
 
-  //MQTT for later
-  // const [connectionStatus, setConnectionStatus] = React.useState(false);
-  // const [messages, setMessages] = React.useState("");
-
-  // useEffect(() => {
-  //   client.on(
-  //     "message",
-  //     (topic: string, payload: Buffer, packet: mqtt.Packet) => {
-  //       setMessages(payload.toString() + "topic: " + topic);
-
-  //       console.log("Message received: ", payload.toString());
-  //     }
-  //   );
-  // }, []);
-
   const trigger = () => {
     client.subscribe(`machines/+/logs`);
   };
