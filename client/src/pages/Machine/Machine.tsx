@@ -17,6 +17,7 @@ import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from 'recharts';
 import Table from '../../components/Table/Table';
 import MachineTable from './MachineTable/MachineTable';
 import EditSensor from './EditSensor/EditSensor';
+import MachineChart from './MachineTable/MachineChart';
 
 
 const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
@@ -107,7 +108,12 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
         // check if topic is for log messages
         if (topic == `machines/${machine.name}/logs`) props.storeModel.addLog(machine.id, payload.toString())
 
-        console.log(payload.toString() + "topic: " + topic);
+        // iterrate trhough the sensors 
+        machine.sensors.map((s: Sensor) => {
+          if(topic == `machines/${machine.name}/data/${s.topic}`) props.storeModel.addSensorValue(machine.id, s.id, payload.toString())
+        })
+
+        console.log(`Listener on Machine ${machine.name} received value: ${payload.toString()} from Topic: ${topic}`);
       }
     );
   }
@@ -150,7 +156,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 </IonRow>
                 <IonRow>
                   <IonCol size="10">
-                    <img style={{ width: "400px" }} src="https://www.arburg.com/fileadmin/redaktion/bilder/vollbild_650x320px/144999_920s.jpg" />
+                    <img style={{ width: "65%" }} src="https://www.arburg.com/fileadmin/redaktion/bilder/vollbild_650x320px/144999_920s.jpg" />
                   </IonCol>
                   <IonCol>
                     <div className="stop-container">
@@ -170,7 +176,9 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 <IonRow>
                   <IonButton onClick={() => startMqttTransmission()}>Start MQTT</IonButton>
                   <IonButton onClick={() => stopMqttTransmission()}>Stop MQTT</IonButton>
-                  <p style={{ marginLeft: "10px" }}>MQTT transmission status: </p>
+                </IonRow>
+                <IonRow>
+                <p style={{ marginLeft: "10px" }}>MQTT transmission status: </p>
                   <div style={{ display: "flex", justifyContent: "center", alignContent: "center", marginLeft: "15px", paddingTop: "9px" }}>
 
                     {
@@ -186,7 +194,6 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                     }} style={{ marginLeft: "15px", marginTop: "6px" }} md={refreshOutline} ios={refreshSharp}></IonIcon>
 
                   </div>
-
                 </IonRow>
               </IonGrid>
             </IonCol>
@@ -285,11 +292,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
             <IonCol size="12" sizeLg="6" style={{ backgroundColor: "#1E1E1E", height: "46vh" }}>
               {/* Column 4 - Machine Overview */}
               {selectedSensor &&
-
-                <>
-                  <MachineTable machineId={machine.id} selectedSensor={selectedSensor} addSensorValue={props.storeModel.addSensorValue} />
-                </>
-
+                <MachineChart values={selectedSensor.values}/>
               }
             </IonCol>
           </IonRow>
