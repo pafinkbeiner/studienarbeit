@@ -51,23 +51,6 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
     setId(le)
     setmachine(props.storeModel.machines.find(item => item.id == id))
 
-    // get the last log messages
-    let db = DatabaseHandler.getDbInstance();
-
-    // get 2 last logs from every machine
-    if (logs.length < 1) {
-      if (machine != undefined) {
-        db.get(machine.id)?.logs.slice(0, 2).map(log => {
-          setLogs((state: string[]) => [...state, log]);
-        });
-      }
-    }
-
-
-    // Subscribe to mqtt feed
-    return () => {
-      // Unsubscribe from mqtt feed
-    }
   })
 
   //MQTT for later
@@ -202,7 +185,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
               <h4>Logs</h4>
               <IonList style={{ height: "85%" }}>
                 {
-                  logs && logs.map((log, index) => {
+                  machine && machine.logs.map((log:string, index:number) => {
                     if (log.search("[INFO]") != -1) {
                       return (<IonItem key={index}><IonLabel ><p style={{ color: "yellow" }}>{log}</p></IonLabel></IonItem>)
                     } else if (log.search("[DEBUG]") != -1) {
@@ -266,6 +249,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                         <IonCol style={{ overflowY: "hidden" }}>{sensor.topic}</IonCol>
                         <IonCol style={{ overflowY: "hidden" }}><IonButton onClick={() => {
                           setSelectedSensor(sensor);
+                          console.log("Selected Sensor changed: ", selectedSensor);
                         }} style={{ width: "80%" }}>show</IonButton></IonCol>
                         <IonCol style={{ overflowY: "hidden" }}><IonButton onClick={() => {
                           setEditSensorSelected(sensor);

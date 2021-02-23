@@ -25,13 +25,7 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
       })
     }
 
-
-    console.log(logs)
-
     // subscribe to log messages of all machines
-    
-    
-
     setTimeout(()=> {props.storeModel.setLoading(false)},1000)
   })
 

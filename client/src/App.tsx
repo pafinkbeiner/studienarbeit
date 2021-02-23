@@ -53,12 +53,17 @@ const App: React.FC = (props) => {
 
   // Sensor Operations
   const addSensor = (machineId: string, sensor: Sensor) => {
-    const machine = machines.find(machine => machine.id === machineId);
-    if(machine != undefined){
-      machine.sensors.push(sensor);
-      removeMachine(machine.id);
-      addMachine(machine);
-    }
+
+    setMachines( (state: AMachine[]) => {
+      let newState = state;
+      let machine = newState.find(m => m.id === machineId)
+      if(machine !== undefined){
+        machine.sensors = [...machine.sensors, sensor];
+        return [...state.filter(m => m.id !== machineId),  machine]; 
+      }else{
+        return state;
+      }
+    })
   }
   const removeSensor = (machineId: string, sensorId: string) => {
     const machine = machines.find(machine => machine.id === machineId);
@@ -99,7 +104,7 @@ const App: React.FC = (props) => {
         if(machine !== undefined){
           machine.sensors.find(s => s.id == sensorId)?.values.push({
             value: Number.parseInt(value),
-            date: Date.now().toLocaleString()
+            date: Date.now().toString()
           })
           return [...state.filter(m => m.id !== machineId),  machine]; 
         }else{
