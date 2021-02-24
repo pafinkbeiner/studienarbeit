@@ -14,16 +14,12 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 
 
   useEffect(() => {
-    let db = DatabaseHandler.getDbInstance();
-    
-    // get 2 last logs from every machine
-    if(logs.length < 1){
-      props.storeModel.machines.map(machine => {
-        db.get(machine.id)?.logs.slice(0,2).map(log => {
-          setLogs((state: string[]) => [...state, log]);
-        });
+
+    props.storeModel.machines.map((machine: AMachine) => {
+      machine.logs.map((log: string) => {
+        setLogs((state: string[]) => [...state, log]);
       })
-    }
+    })
 
     // subscribe to log messages of all machines
     setTimeout(()=> {props.storeModel.setLoading(false)},1000)

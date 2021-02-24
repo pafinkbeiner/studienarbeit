@@ -7,18 +7,21 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
+  ReferenceLine
 } from "recharts";
-import { DatabaseHandler } from "../../../helper/db";
 
-const MachineChart = (props: {values: Array<{value: number, date: string}>} ) => {
+const MachineChart = (props: {values: Array<{value: number, date: string}>, min: number, max: number} ) => {
 
   const [tableData, setTableData] = useState<{value: number, date: string}[]>([])
 
   useEffect(() => {
+    // sort table data - todo could lead to performance problems
     const tempTableData = props.values.sort(compareFunc)
     const dataLength = props.values.length;
+    // limit table data
     setTableData(tempTableData.slice(dataLength-10,dataLength))
+    // format date into time strings
     setTableData( (state: {value: number, date: string}[]) => {
       const newState: {value: number, date: string}[] = [];
       state.map(item => newState.push({
@@ -56,6 +59,8 @@ const MachineChart = (props: {values: Array<{value: number, date: string}>} ) =>
         <YAxis />
         <Tooltip />
         <Legend />
+        <ReferenceLine y={props.max} label="max" stroke="red" strokeDasharray="3 3" />
+        <ReferenceLine y={props.min} label="min" stroke="red" strokeDasharray="3 3" />
         <Line
           type="monotone"
           dataKey="value"

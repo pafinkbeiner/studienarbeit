@@ -142,7 +142,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 <IonRow>
                   <IonButton onClick={() => startMqttTransmission()}>Start MQTT</IonButton>
                   <IonButton onClick={() => stopMqttTransmission()}>Stop MQTT</IonButton>
-                  <IonButton onClick={() => {
+                  <IonButton color={"black"} onClick={() => {
                     props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "11");
                     props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "17");
                     props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "12");
@@ -274,7 +274,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
             <IonCol size="12" sizeLg="6" style={{ backgroundColor: "#1E1E1E", height: "46vh" }}>
               {/* Column 4 - Machine Overview */}
               {selectedSensor &&
-                <MachineChart values={selectedSensor.values}/>
+                <MachineChart values={selectedSensor.values} min={selectedSensor.min} max={selectedSensor.max}/>
               }
             </IonCol>
           </IonRow>
