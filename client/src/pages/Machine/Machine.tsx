@@ -44,13 +44,11 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
   const [selectedSensor, setSelectedSensor] = useState<Sensor>();
 
   useEffect(() => {
-
     const le = ((window.location.href).toString().split("/")[(window.location.href).toString().split("/").length - 1]).toString();
     // Following line is not necassary
     if (props.storeModel.machines.length > 0) setId(props.storeModel.machines[0].id.toString());
     setId(le)
     setmachine(props.storeModel.machines.find(item => item.id == id))
-
   })
 
   const trigger = () => {
@@ -144,6 +142,9 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 <IonRow>
                   <IonButton onClick={() => startMqttTransmission()}>Start MQTT</IonButton>
                   <IonButton onClick={() => stopMqttTransmission()}>Stop MQTT</IonButton>
+                  <IonButton onClick={() => {
+                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "11");
+                  }}>Add Sensor Value 11</IonButton>
                 </IonRow>
                 <IonRow>
                 <p style={{ marginLeft: "10px" }}>MQTT transmission status: </p>

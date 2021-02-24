@@ -56,14 +56,14 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 
               </IonGrid>
             </IonCol>
-            <IonCol size="12" sizeLg="6" style={{backgroundColor: "red", height: "46.5vh", marginBottom: "0.5vh"}}>
+            <IonCol size="12" sizeLg="6" style={{backgroundColor: "#1E1E1E", height: "46.5vh", marginBottom: "0.5vh"}}>
               {/* Column 2 - Log Messages */}
             </IonCol>
  
-            <IonCol size="12" sizeLg="6" style={{backgroundColor: "blue" , height: "46vh"}}>
+            <IonCol size="12" sizeLg="6" style={{backgroundColor: "#2E2E2E" , height: "46vh"}}>
               {/* Column 3 - If Machine Clicked*/}
             </IonCol>
-            <IonCol size="12" sizeLg="6" style={{backgroundColor: "yellow" , height: "46vh"}}>
+            <IonCol size="12" sizeLg="6" style={{backgroundColor: "#3E3E3E" , height: "46vh"}}>
               {/* Column 4 - Machine Overview */}
             </IonCol>
           </IonRow>

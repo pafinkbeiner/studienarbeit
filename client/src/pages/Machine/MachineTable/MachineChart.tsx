@@ -14,13 +14,9 @@ const MachineChart = (props: {values: Array<{value: number, date: string}>} ) =>
   const [tableData, setTableData] = useState<{value: number, date: string}[]>([])
 
   useEffect(() => {
-    //sort Table data
     const tempTableData = props.values.sort(compareFunc)
-    //set table data limit 10
-    console.log("Is the order correct?",tempTableData)
     setTableData(tempTableData.slice(0,9))
-    console.log("Final result", tableData)
-  }, [])
+  }, [props])
 
   const compareFunc = (a: {value: number, date: string}, b: {value: number, date: string}) => {
       if (a.date < b.date) {
