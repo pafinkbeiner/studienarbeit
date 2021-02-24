@@ -5,6 +5,7 @@ import './Dashboard.css';
 import { AMachine, Sensor, StoreModel } from '../../models/Store';
 import MachineItem from './MachineItem/MachineItem';
 import MachineChart from '../Machine/MachineTable/MachineChart';
+import { DatabaseHandler } from '../../helper/db';
 
 const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 
@@ -50,6 +51,8 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
                     return <MachineItem key={machine.id} machine={machine} setSelectedMachine={setSelectedMachine} setSelectedSensor={setSelectedSensor}/>
                   })}
                 </IonRow>
+                
+                {/* <IonButton onClick={() => { console.log(DatabaseHandler.getDbInstance().getAll()); }}>show db</IonButton> */}
 
               </IonGrid>
             </IonCol>

@@ -8,6 +8,7 @@ export interface AMachine{
     sensors: Sensor[];
     logs: string[];
     es: string;
+    active?: boolean| undefined;
 }
 
 export interface Sensor{
