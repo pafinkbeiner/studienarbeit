@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export class Persitor{
 
     data: string = JSON.stringify([
@@ -7,11 +9,13 @@ export class Persitor{
     // data:string = "[]";
 
     fileWrite(index: string, data: string) {
-        this.data = JSON.stringify(data)
+        this.data = data;
+        axios.get(`http://localhost:5002/set/${index}/${data}`)
     }
       
-    fileRead(index: string): string {
-        return this.data;
+    async fileRead(index: string): Promise<string> {
+        const res = await axios.get(`http://localhost:5002/get/${index}`)
+        return res.data;
     }
 }
 

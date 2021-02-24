@@ -86,6 +86,8 @@ router.post("/set/:key",authMiddleware, function(req, res, next) {
  */
 router.get("/set/:key/:data",authMiddleware ,function(req, res, next) {
 
+  console.log("Set data", req.params.data)
+
   if(req.params.key == undefined) res.json(errorStatus.msg=`Key was not provided`);
   if(req.params.data == undefined) res.json(errorStatus.msg=`Data was not provided`);
   

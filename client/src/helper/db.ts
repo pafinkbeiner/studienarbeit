@@ -44,7 +44,10 @@ export class DatabaseHandler{
         if(!DatabaseHandler.database){
             DatabaseHandler.database = new Database();
             /* Load content into database.machines */
-            DatabaseHandler.database.machines = JSON.parse(PersitorHandler.getPersistorInstance().fileRead("machines"));
+            PersitorHandler.getPersistorInstance().fileRead("asdasd").then(data => {
+                console.log("adasdasda", data)
+            })
+            DatabaseHandler.database.machines = JSON.parse(PersitorHandler.getPersistorInstance().data);
         }
         return DatabaseHandler.database;
     }

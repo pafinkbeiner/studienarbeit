@@ -4,11 +4,15 @@ import express from "express";
 import path from "path";
 import indexRouter from "./routes/index"
 const createError = require("http-errors");
+const cors = require('cors')
+
 
 // initialize configuration
 dotenv.config();
 
 const app = express();
+
+app.use(cors())
 
 // port is now available to the Node.js runtime
 // as if it were an environment variable
