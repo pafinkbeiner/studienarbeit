@@ -15,7 +15,8 @@ const MachineChart = (props: {values: Array<{value: number, date: string}>} ) =>
 
   useEffect(() => {
     const tempTableData = props.values.sort(compareFunc)
-    setTableData(tempTableData.slice(0,9))
+    const dataLength = props.values.length;
+    setTableData(tempTableData.slice(dataLength-10,dataLength))
   }, [props])
 
   const compareFunc = (a: {value: number, date: string}, b: {value: number, date: string}) => {
