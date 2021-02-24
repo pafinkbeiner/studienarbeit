@@ -1,7 +1,6 @@
 import Menu from './components/Menu';
-import Page from './pages/Page';
 import React, { useEffect, useState } from 'react';
-import { IonApp, IonLoading, IonPage, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import { IonApp, IonLoading, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 

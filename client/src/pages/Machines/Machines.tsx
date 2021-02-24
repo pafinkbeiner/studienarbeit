@@ -8,14 +8,13 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React, { useEffect } from "react";
-import mqtt from "mqtt";
+import React from "react";
 // import { useParams } from 'react-router';
 import "./Machines.css";
 
 import Navbar from "../../components/Navbar/Navbar";
 import MachineCard from "./MachineCard/MachineCard";
-import { AMachine, StoreModel } from "../../models/Store";
+import { StoreModel } from "../../models/Store";
 import AddMachine from "./AddMachine/AddMachine";
 
 const Machines: React.FC<{ storeModel: StoreModel }> = (props) => {

@@ -1,11 +1,9 @@
-import { IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
-import { useParams } from 'react-router';
 import './Dashboard.css';
 import { AMachine, StoreModel } from '../../models/Store';
 import MachineItem from './MachineItem/MachineItem';
-import { DatabaseHandler } from '../../helper/db';
 
 const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 

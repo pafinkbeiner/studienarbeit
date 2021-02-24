@@ -1,30 +1,16 @@
 import {
   IonButton,
-  IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonCol,
-  IonContent,
   IonGrid,
-  IonHeader,
-  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
-  IonMenuButton,
   IonModal,
-  IonPage,
   IonRow,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 import { v4 as uuidv4 } from 'uuid';
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { pin, walk, warning, wifi, wine } from "ionicons/icons";
-import { AMachine, Sensor } from "../../../models/Store";
+import React, {useState } from "react";
+import { Sensor } from "../../../models/Store";
 
 
 const AddMachine: React.FC<{ machineId: string, configureSensor: boolean, setConfigureSensor: (bol: boolean) => void, addSensor: (machineId: string, sensor: Sensor) => void }> = (props) => {

@@ -1,29 +1,17 @@
 import {
   IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonCol,
-  IonContent,
   IonGrid,
-  IonHeader,
-  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
-  IonMenuButton,
   IonModal,
-  IonPage,
   IonRow,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 import { v4 as uuidv4 } from 'uuid';
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { pin, walk, warning, wifi, wine } from "ionicons/icons";
+import React, {  useState } from "react";
 import { AMachine } from "../../../models/Store";
 
 

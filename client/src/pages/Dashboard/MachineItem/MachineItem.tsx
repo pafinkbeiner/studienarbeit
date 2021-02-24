@@ -1,8 +1,8 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon } from "@ionic/react";
-import { cubeOutline, cubeSharp, sendOutline, sendSharp } from "ionicons/icons";
+import { sendOutline, sendSharp } from "ionicons/icons";
 import React from "react";
 import { Link } from "react-router-dom";
-import { AMachine, Sensor } from "../../../models/Store";
+import { AMachine } from "../../../models/Store";
 
 
 const MachineItem: React.FC<{ machine: AMachine, setSelectedMachine: (machine: AMachine) => void }> = (props) => {

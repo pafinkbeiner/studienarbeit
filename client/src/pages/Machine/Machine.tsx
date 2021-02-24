@@ -1,21 +1,16 @@
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
-// import { useParams } from 'react-router';
 import './Machine.css';
 import Navbar from '../../components/Navbar/Navbar';
 import client from '../../helper/mqtt';
 import mqtt from "mqtt"
-import { AMachine, Sensor, StoreModel } from '../../models/Store';
+import { Sensor, StoreModel } from '../../models/Store';
 import AddSensor from './AddSensor/AddSensor';
 import redButton from "./Button_Icon_Red.svg"
 import blackButton from "./Button_Icon_Black.svg"
 import greenButton from "./Button_Icon_Green.svg"
-import { addOutline, addSharp, refreshCircle, refreshOutline, refreshSharp, settingsOutline, settingsSharp } from 'ionicons/icons';
+import { addOutline, addSharp, refreshOutline, refreshSharp, settingsOutline, settingsSharp } from 'ionicons/icons';
 import AddEs from './AddEs/AddEs';
-import { DatabaseHandler } from '../../helper/db';
-import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from 'recharts';
-import Table from '../../components/Table/Table';
-import MachineTable from './MachineTable/MachineTable';
 import EditSensor from './EditSensor/EditSensor';
 import MachineChart from './MachineTable/MachineChart';
 
