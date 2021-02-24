@@ -20,7 +20,7 @@ const Settings: React.FC = () => {
         </IonHeader>
 
         {/* Content */}
-        <h1>{"Hello"}</h1>
+        <h1>{"Settings"}</h1>
 
       </IonContent>
     </IonPage>

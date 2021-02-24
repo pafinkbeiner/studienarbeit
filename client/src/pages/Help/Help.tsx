@@ -20,7 +20,7 @@ const Help: React.FC = () => {
         </IonHeader>
 
         {/* Content */}
-        <h1>{"Hello"}</h1>
+        <h1>{"Help"}</h1>
 
       </IonContent>
     </IonPage>

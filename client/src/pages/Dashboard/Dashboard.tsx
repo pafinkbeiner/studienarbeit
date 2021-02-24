@@ -72,7 +72,7 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
                 }
               </IonList>
             </IonCol>
-            <IonCol size="12" sizeLg="2" style={ selectedSensor && {backgroundColor: "#2E2E2E" , height: "46vh"}}>
+            <IonCol size="12" sizeLg="2" style={ selectedSensor && {backgroundColor: "#1E1E1E" , height: "46vh"}}>
               {/* Column 3 - Sensor Overview */}
               { 
                 (selectedMachine && selectedSensor) && 
@@ -95,15 +95,29 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
                             setSelectedSensor(selectedMachine.sensors[0])
                           }
                         }}>{">"}</IonButton>
+                        <IonButton onClick={() =>{
+                          const sensor = selectedSensor;
+                          setSelectedSensor(undefined);
+                          setSelectedSensor(sensor);
+                        }}>Refresh</IonButton>
                       </IonCol>
                     </IonRow>
                     <IonRow>
-                      <h5>{selectedSensor.name}</h5>
+                      <h5>{`Name: ${selectedSensor.name}`}</h5>
+                    </IonRow>
+                    <IonRow>
+                    <h5>{`min: ${selectedSensor.min}`}</h5>
+                    </IonRow>
+                    <IonRow>
+                    <h5>{`max: ${selectedSensor.max}`}</h5>
+                    </IonRow>
+                    <IonRow>
+                    <h5>{`topic: ${selectedSensor.topic}`}</h5>
                     </IonRow>
                 </IonGrid>
               }
             </IonCol>
-            <IonCol size="12" sizeLg="10" style={ selectedSensor && {backgroundColor: "#3E3E3E" , height: "46vh"}}>
+            <IonCol size="12" sizeLg="10" style={ selectedSensor && {backgroundColor: "#1E1E1E" , height: "46vh"}}>
               {/* Column 4 - Sensor table */}
               {
                 (selectedMachine && selectedSensor) && 
