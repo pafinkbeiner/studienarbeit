@@ -20,7 +20,7 @@ const MachineChart = (props: {values: Array<{value: number, date: string}>, min:
     const tempTableData = props.values.sort(compareFunc)
     const dataLength = props.values.length;
     // limit table data
-    setTableData(tempTableData.slice(dataLength-10,dataLength))
+    setTableData(tempTableData.slice(dataLength-50,dataLength))
     // format date into time strings
     setTableData( (state: {value: number, date: string}[]) => {
       const newState: {value: number, date: string}[] = [];
