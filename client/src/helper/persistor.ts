@@ -10,11 +10,11 @@ export class Persitor{
 
     fileWrite(index: string, data: string) {
         this.data = data;
-        axios.get(`http://localhost:5002/set/${index}/${data}`)
+        axios.post(`http://localhost:5002/set/${index}/`, data)
     }
       
     async fileRead(index: string): Promise<string> {
-        const res = await axios.get(`http://localhost:5002/get/${index}`)
+        const res = await axios.get(`http://localhost:5002/all`)
         return res.data;
     }
 }

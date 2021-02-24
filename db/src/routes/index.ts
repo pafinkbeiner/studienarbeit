@@ -55,7 +55,7 @@ router.get("/",function(req, res, next) {
  * GET
  * Returns data to a specific key
  */
-router.get("/get/:key",authMiddleware, function(req, res, next) {
+router.get("/get/:key", function(req, res, next) {
 
   if(req.params.key == undefined) res.json(errorStatus.msg=`Key was not provided`);
 
@@ -68,10 +68,12 @@ router.get("/get/:key",authMiddleware, function(req, res, next) {
  * key -> req.params.key
  * data -> req.body.data
  */
-router.post("/set/:key",authMiddleware, function(req, res, next) {
+router.post("/set/:key", function(req, res, next) {
   
   if(req.params.key == undefined) res.json(errorStatus.msg=`Key was not provided`);
   if(req.body == undefined) res.json(errorStatus.msg=`Data was not provided`);
+
+  console.log("SET", req.body)
 
   DatabaseHandler.getDbInstance().set(req.params.key, req.body);
 
@@ -84,7 +86,7 @@ router.post("/set/:key",authMiddleware, function(req, res, next) {
  * key -> req.params.key
  * data -> req.params.data
  */
-router.get("/set/:key/:data",authMiddleware ,function(req, res, next) {
+router.get("/set/:key/:data" ,function(req, res, next) {
 
   console.log("Set data", req.params.data)
 
@@ -103,7 +105,7 @@ router.get("/set/:key/:data",authMiddleware ,function(req, res, next) {
  * GET 
  * Returns everything that is saved in the Database
  */
-router.get("/all", authMiddleware,function(req, res, next) {
+router.get("/all",function(req, res, next) {
 
   res.json(DatabaseHandler.getDbInstance().getAll());
 
