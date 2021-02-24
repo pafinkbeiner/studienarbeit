@@ -1,21 +1,24 @@
-import { IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import './Dashboard.css';
-import { AMachine, StoreModel } from '../../models/Store';
+import { AMachine, Sensor, StoreModel } from '../../models/Store';
 import MachineItem from './MachineItem/MachineItem';
+import MachineChart from '../Machine/MachineTable/MachineChart';
 
 const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 
   const [selectedMachine, setSelectedMachine] = useState<AMachine>();
   const [logs, setLogs] = useState<string[]>([])
+  const [selectedSensor, setSelectedSensor] = useState<Sensor>();
 
 
   useEffect(() => {
 
+    if(logs.length < 1)
     props.storeModel.machines.map((machine: AMachine) => {
-      machine.logs.map((log: string) => {
-        setLogs((state: string[]) => [...state, log]);
+      machine.logs.slice(machine.logs.length - 5, machine.logs.length).map((log: string) => {
+        setLogs((state: string[]) => [...state, `${machine.name}: ${log}`]);
       })
     })
 
@@ -44,7 +47,7 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
               <IonGrid>
                 <IonRow>
                   {props.storeModel.machines && props.storeModel.machines.map(machine => {
-                    return <MachineItem key={machine.id} machine={machine} setSelectedMachine={setSelectedMachine}/>
+                    return <MachineItem key={machine.id} machine={machine} setSelectedMachine={setSelectedMachine} setSelectedSensor={setSelectedSensor}/>
                   })}
                 </IonRow>
 
@@ -52,19 +55,63 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
             </IonCol>
             <IonCol size="12" sizeLg="6" style={{backgroundColor: "#1E1E1E", height: "46.5vh", marginBottom: "0.5vh"}}>
               {/* Column 2 - Log Messages */}
+              <h4>Logs</h4>
+              <IonList style={{ height: "85%" , overflowY: "scroll"}}>
+                {
+                  logs.length > 0 && logs.map((log:string, index:number) => {
+                    if (log.toUpperCase().search("INFO") != -1) {
+                      return (<IonItem key={index}><IonLabel ><p style={{ color: "yellow" }}>{log}</p></IonLabel></IonItem>)
+                    } else if (log.toUpperCase().search("DEBUG") != -1) {
+                      return (<IonItem key={index}><IonLabel><p style={{ color: "green" }}>{log}</p></IonLabel></IonItem>)
+                    } else if (log.toUpperCase().search("ERROR") != -1 ) {
+                      return (<IonItem key={index}><IonLabel><p style={{ color: "red" }}>{log}</p></IonLabel></IonItem>)
+                    } else {
+                      return (<IonItem key={index}><IonLabel><p style={{ color: "white" }}>{log}</p></IonLabel></IonItem>)
+                    }
+                  })
+                }
+              </IonList>
             </IonCol>
- 
-            <IonCol size="12" sizeLg="6" style={{backgroundColor: "#2E2E2E" , height: "46vh"}}>
-              {/* Column 3 - If Machine Clicked*/}
+            <IonCol size="12" sizeLg="2" style={ selectedSensor && {backgroundColor: "#2E2E2E" , height: "46vh"}}>
+              {/* Column 3 - Sensor Overview */}
+              { 
+                (selectedMachine && selectedSensor) && 
+                  <IonGrid>
+                    <IonRow>
+                      <IonCol>
+                        <IonButton onClick={() => {
+                          const currentIndexPosition = selectedMachine.sensors.findIndex((s:Sensor) => s.id == selectedSensor.id);
+                          if(currentIndexPosition != 0){
+                            setSelectedSensor(selectedMachine.sensors[currentIndexPosition-1])
+                          }else{
+                            setSelectedSensor(selectedMachine.sensors[selectedMachine.sensors.length - 1])
+                          }
+                        }}>{"<"}</IonButton>
+                        <IonButton onClick={() => {
+                          const currentIndexPosition = selectedMachine.sensors.findIndex((s:Sensor) => s.id == selectedSensor.id);
+                          if(currentIndexPosition != selectedMachine.sensors.length - 1){
+                            setSelectedSensor(selectedMachine.sensors[currentIndexPosition + 1])
+                          }else{
+                            setSelectedSensor(selectedMachine.sensors[0])
+                          }
+                        }}>{">"}</IonButton>
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <h5>{selectedSensor.name}</h5>
+                    </IonRow>
+                </IonGrid>
+              }
             </IonCol>
-            <IonCol size="12" sizeLg="6" style={{backgroundColor: "#3E3E3E" , height: "46vh"}}>
-              {/* Column 4 - Machine Overview */}
+            <IonCol size="12" sizeLg="10" style={ selectedSensor && {backgroundColor: "#3E3E3E" , height: "46vh"}}>
+              {/* Column 4 - Sensor table */}
+              {
+                (selectedMachine && selectedSensor) && 
+                  <MachineChart values={selectedSensor.values} min={selectedSensor.min} max={selectedSensor.max}></MachineChart>
+              }
             </IonCol>
           </IonRow>
-
         </IonGrid>
-
-
       </IonContent>
     </IonPage>
   );

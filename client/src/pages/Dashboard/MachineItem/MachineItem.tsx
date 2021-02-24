@@ -2,13 +2,16 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon } from "@
 import { sendOutline, sendSharp } from "ionicons/icons";
 import React from "react";
 import { Link } from "react-router-dom";
-import { AMachine } from "../../../models/Store";
+import { AMachine, Sensor } from "../../../models/Store";
 
 
-const MachineItem: React.FC<{ machine: AMachine, setSelectedMachine: (machine: AMachine) => void }> = (props) => {
+const MachineItem: React.FC<{ machine: AMachine, setSelectedMachine: (machine: AMachine) => void, setSelectedSensor: (sensor: Sensor) => void; }> = (props) => {
 
     return (
-            <IonCard onClick={() => {props.setSelectedMachine(props.machine)}}>
+            <IonCard onClick={() => {
+              props.setSelectedMachine(props.machine);
+              if(props.machine.sensors.length > 0) props.setSelectedSensor(props.machine.sensors[0]);
+            }}>
             <img height="100px" src="https://www.arburg.com/fileadmin/redaktion/bilder/vollbild_650x320px/144999_920s.jpg" />
             <IonCardHeader>
               <IonCardTitle>{props.machine.name}</IonCardTitle>

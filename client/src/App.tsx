@@ -131,8 +131,8 @@ const App: React.FC = (props) => {
     //TEMp load machines to db
     machines.map(m => db.push(m))
     if(machines.length < 1){
-      setMachines([{name: "Machine 1", id:"789jf824j29f8j2", sensors: [{name: "sensor1", min: 0, max: 500, id: "235j2ioj235oi2j52i5j", topic: "/sakdj/topic",values: [{value: 5, date: "12345"},{value: 6, date: "1235"},{value: 8, date: "1236"} ]}], logs: ["log1", "log"], es:"/test"}, 
-      {name: "Machine 2", id:"789jf82asdasdasdj2", sensors: [], logs: ["log1", "[INFO] System started"], es: ""}])
+      setMachines([{name: "Machine 1", id:"789jf824j29f8j2", sensors: [{name: "sensor1", min: 0, max: 500, id: "235j2ioj235oi2j52i5j", topic: "/sakdj/topic",values: [{value: 5, date: "12345"},{value: 6, date: "1235"},{value: 8, date: "1236"} ]}], logs: ["log1", "[ERROR] An error occured while starting machine..."], es:"/test"}, 
+      {name: "Machine 2", id:"789jf82asdasdasdj2", sensors: [], logs: ["[DEBUG] The System is starting up....", "[INFO] System started"], es: ""}])
     } 
   })
 
