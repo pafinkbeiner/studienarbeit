@@ -52,7 +52,6 @@ const App: React.FC = (props) => {
 
   // Sensor Operations
   const addSensor = (machineId: string, sensor: Sensor) => {
-
     setMachines( (state: AMachine[]) => {
       let newState = state;
       let machine = newState.find(m => m.id === machineId)
@@ -65,19 +64,21 @@ const App: React.FC = (props) => {
     })
   }
   const removeSensor = (machineId: string, sensorId: string) => {
-    const machine = machines.find(machine => machine.id === machineId);
-    if(machine != undefined){
-      machine.sensors = machine.sensors.filter(sensor => sensor.id !== sensorId);
-      removeMachine(machine.id);
-      addMachine(machine);
-    }
+    setMachines( (state: AMachine[]) => {
+      let machine = state.find(m => m.id === machineId)
+      if(machine !== undefined){
+        machine.sensors = [...machine.sensors.filter(s => s.id !== sensorId)];
+        return [...state.filter(m => m.id !== machineId)]; 
+      }else{
+        return state;
+      }
+    })
   }
 
     // Es Operations
     const addEs = (machineId: string, es: string) => {
       setMachines( (state: AMachine[]) => {
-        let newState = state;
-        let machine = newState.find(m => m.id === machineId)
+        let machine = state.find(m => m.id === machineId)
         if(machine !== undefined){
           machine.es = es;
           return [...state.filter(m => m.id !== machineId),  machine]; 
@@ -88,12 +89,15 @@ const App: React.FC = (props) => {
     }
 
     const addLog = (machineId: string, log: string) => {
-      const machine = machines.find(machine => machine.id === machineId);
-      if(machine != undefined){
-        machine.logs.push(log);
-        removeMachine(machine.id);
-        addMachine(machine);
-      }
+      setMachines( (state: AMachine[]) => {
+        let machine = state.find(m => m.id === machineId)
+        if(machine !== undefined){
+          machine.logs = [...machine.logs, log];
+          return [...state.filter(m => m.id !== machineId),  machine]; 
+        }else{
+          return state;
+        }
+      })
     }
 
     const addSensorValue = (machineId: string, sensorId: string, value: string) => {
