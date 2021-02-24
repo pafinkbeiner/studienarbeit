@@ -13,11 +13,6 @@ export class Persitor{
     fileRead(index: string): string {
         return this.data;
     }
-
-    // reset(){ db.delete(`/`);}
-
-    // reload(){db.reload();}
-
 }
 
 export class PersitorHandler{
