@@ -130,7 +130,7 @@ router.get("/delete/:key", authMiddleware,function(req, res, next) {
  * GET
  * Wipes db
  */
-router.get("/wipe", authMiddleware,function(req, res, next) {
+router.get("/wipe",function(req, res, next) {
 
   DatabaseHandler.getDbInstance().set("", {});  
 
