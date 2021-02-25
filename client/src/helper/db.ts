@@ -6,7 +6,7 @@ export class Database{
     persistor = PersitorHandler.getPersistorInstance();
     machines: Array<AMachine> = [];
 
-    override(machines: AMachine[]){
+    async override(machines: AMachine[]){
         this.machines = machines; 
         this.persistor.fileWrite(this.machines);
     }
