@@ -19,10 +19,11 @@ const MachineCard: React.FC<{ machine: AMachine }> = (props) => {
         <IonCardSubtitle>{props.machine.id}</IonCardSubtitle>
       </IonCardHeader>
       <IonCardContent>
-        {props.machine.sensors.length > 1 ? (
+        {props.machine.sensors.length > 0 ? (
           <>
+            <b style={{color:"#9E9E9E"}}>Sensoren: </b>
             {props.machine.sensors.map((sensor, index) => {
-                return (index == props.machine.sensors.length) ? <>{sensor.name}</> : <>{sensor.name}, </>;
+                return (index == props.machine.sensors.length - 1) ? <>{sensor.name}</> : <>{sensor.name}, </>;
             })}
           </>
         ) : (

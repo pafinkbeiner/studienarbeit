@@ -9,7 +9,7 @@ import AddSensor from './AddSensor/AddSensor';
 import redButton from "./Button_Icon_Red.svg"
 import blackButton from "./Button_Icon_Black.svg"
 import greenButton from "./Button_Icon_Green.svg"
-import { addOutline, addSharp, refreshOutline, refreshSharp, settingsOutline, settingsSharp } from 'ionicons/icons';
+import { addOutline, addSharp, refreshOutline, refreshSharp, settingsOutline, settingsSharp, trashBinOutline, trashBinSharp } from 'ionicons/icons';
 import AddEs from './AddEs/AddEs';
 import EditSensor from './EditSensor/EditSensor';
 import MachineChart from './MachineTable/MachineChart';
@@ -202,6 +202,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                   <IonCol><b>path</b></IonCol>
                   <IonCol><b>show</b></IonCol>
                   <IonCol><b>edit</b></IonCol>
+                  <IonCol><b>remove</b></IonCol>
                 </IonRow>
 
                 {machine &&
@@ -213,6 +214,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                     <IonCol style={{ overflowY: "hidden" }}>{machine.es}</IonCol>
                     <IonCol style={{ overflowY: "hidden" }}><IonButton disabled={true} style={{ width: "80%" }}>show</IonButton></IonCol>
                     <IonCol style={{ overflowY: "hidden" }}><IonButton style={{ width: "80%" }}>edit</IonButton></IonCol>
+                    <IonCol style={{ overflowY: "hidden" }}>N/A</IonCol>
                   </IonRow>
                 }
 
@@ -233,6 +235,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                           setEditSensorSelected(sensor);
                           setEditSensor(true);
                         }} style={{ width: "80%" }}>edit</IonButton></IonCol>
+                        <IonCol style={{ overflowY: "hidden" }}><IonIcon onClick={() => props.storeModel.removeSensor(machine.id, sensor.id)} style={{marginTop:"10px", marginLeft:"19px"}} ios={trashBinOutline} md={trashBinSharp} ></IonIcon></IonCol>
                       </IonRow>
                     )
                   })
