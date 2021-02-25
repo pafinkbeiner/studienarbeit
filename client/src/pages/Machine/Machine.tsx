@@ -74,6 +74,8 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
           if(topic == `machines/${machine.name}/data/${s.topic}`) props.storeModel.addSensorValue(machine.id, s.id, payload.toString())
         })
 
+        // TODO Subscribe to active sensor
+
         console.log(`Listener on Machine ${machine.name} received value: ${payload.toString()} from Topic: ${topic}`);
       }
     );
@@ -90,6 +92,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
       // TODO Hier eventuell direkt die topic einbinden
       client.unsubscribe(`machines/${machine.name}/data/${s.topic}`)
     })
+    // TODO Unsubscribe to active sensor
     // Remove all listeners
     client.removeAllListeners();
   }
@@ -113,7 +116,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
               {/* Column 1 - Machine Overview */}
               <IonGrid>
                 <IonRow>
-                  <h1 style={{ color: "white" }}>{machine && <>{machine.name}</>}</h1>
+                  <h1 style={{ color: "white" }}>{machine && <>{machine.name}</>}</h1>{ (machine && machine.active) && <>- Active</> }
                 </IonRow>
                 <IonRow>
                   <IonCol size="10">
