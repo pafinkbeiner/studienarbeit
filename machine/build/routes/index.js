@@ -20,11 +20,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = __importStar(require("express"));
-var Database_1 = require("../Helper/Database");
 var router = express.Router();
 /* GET home page. */
 router.get("/", function (req, res, next) {
-    res.json(Database_1.DatabaseHandler.getDbInstance().getAll());
+    res.sendFile("index.html");
 });
 router.get("/info", function (req, res, next) {
     res.json([

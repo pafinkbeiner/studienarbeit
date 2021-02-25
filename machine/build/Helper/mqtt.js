@@ -18,12 +18,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = __importStar(require("express"));
-var Log_1 = require("../Helper/Log");
-var router = express.Router();
-/* GET home page. */
-router.get("/", function (req, res, next) {
-    res.json(Log_1.LogHandler.getLogInstance().getAll());
-});
-exports.default = router;
+var mqtt = __importStar(require("async-mqtt"));
+var dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+console.log(process.env.MQTT_BROKER);
+// Connect to MQTT Broker
+var client = mqtt.connect('mqtt://test.mosquitto.org');
+client.on("connect", function () { console.log("Connected to MQTT Broker!"); });
+exports.default = client;
