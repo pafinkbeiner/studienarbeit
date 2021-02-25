@@ -137,21 +137,6 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 <IonRow>
                   <IonButton onClick={() => startMqttTransmission()}>Start MQTT</IonButton>
                   <IonButton onClick={() => stopMqttTransmission()}>Stop MQTT</IonButton>
-                  <IonButton color={"black"} onClick={() => {
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "11");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "17");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "12");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "21");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "14");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "15");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "16");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "13");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "18");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "19");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "11");
-                    props.storeModel.addSensorValue(machine.id, "235j2ioj235oi2j52i5j", "20");
-
-                  }}>Add Sensor Value 11</IonButton>
                 </IonRow>
                 <IonRow>
                 <p style={{ marginLeft: "10px" }}>MQTT transmission status: </p>
