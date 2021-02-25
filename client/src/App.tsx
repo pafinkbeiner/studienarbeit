@@ -62,6 +62,7 @@ const App: React.FC = (props) => {
         return state;
       }
     })
+    db.override(machines);
   }
   const removeSensor = (machineId: string, sensorId: string) => {
     setMachines( (state: AMachine[]) => {
@@ -73,6 +74,7 @@ const App: React.FC = (props) => {
         return state;
       }
     })
+    db.override(machines);
   }
 
     // Es Operations
@@ -86,6 +88,7 @@ const App: React.FC = (props) => {
           return state;
         }
       })
+      db.override(machines);
     }
 
     const addLog = (machineId: string, log: string) => {
@@ -98,6 +101,7 @@ const App: React.FC = (props) => {
           return state;
         }
       })
+      db.override(machines);
     }
 
     const addSensorValue = (machineId: string, sensorId: string, value: string) => {
@@ -114,6 +118,7 @@ const App: React.FC = (props) => {
           return state;
         }
       })
+      db.override(machines);
     }
 
   const StoreModel: StoreModel = {

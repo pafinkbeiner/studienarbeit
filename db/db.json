@@ -1,1 +1,1 @@
-{}
+{"machines":[{"name":"machine1","id":"56946f33-dc34-4aca-8e0e-f5283a2ccfe4","sensors":[{"id":"f87e3ffa-1ff0-476b-b85d-25bd321ccc8e","name":"sensor1","max":"50","min":"0","values":[],"topic":"topic"}],"logs":[],"es":""}]}

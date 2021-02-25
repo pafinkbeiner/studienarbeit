@@ -1,19 +1,24 @@
 import { AMachine } from "../models/Store";
-import { Persitor, PersitorHandler } from "./persistor";
+import { Persitor, PersitorHandler } from "./machinePersistor";
 
 export class Database{
 
     persistor = PersitorHandler.getPersistorInstance();
     machines: Array<AMachine> = [];
 
+    override(machines: AMachine[]){
+        this.machines = machines; 
+        this.persistor.fileWrite(this.machines);
+    }
+
     push(machine: AMachine){
         this.machines.push(machine);
-        this.persistor.fileWrite(`machines.txt`, JSON.stringify(this.machines));
+        this.persistor.fileWrite(this.machines);
     }
 
     update(machine: AMachine){
         this.machines.splice(this.machines.findIndex(m => m.id == machine.id), 1, machine);
-        this.persistor.fileWrite(`machines.txt`, JSON.stringify(this.machines));
+        this.persistor.fileWrite(this.machines);
     }
 
     get(machineId: string): AMachine | undefined{
@@ -30,7 +35,7 @@ export class Database{
         }else{
             this.machines = this.machines.splice(this.machines.findIndex(m => m.id == machineId), 1);
         }
-        this.persistor.fileWrite(`machines.txt`, JSON.stringify(this.machines));
+        this.persistor.fileWrite(this.machines);
     }
 }
 
@@ -44,10 +49,9 @@ export class DatabaseHandler{
         if(!DatabaseHandler.database){
             DatabaseHandler.database = new Database();
             /* Load content into database.machines */
-            PersitorHandler.getPersistorInstance().fileRead("machine.txt").then(data => {
-                console.log("machine.txt", data)
+            PersitorHandler.getPersistorInstance().fileRead().then(data => {
+                DatabaseHandler.database.machines = data;
             })
-            DatabaseHandler.database.machines = JSON.parse(PersitorHandler.getPersistorInstance().data);
         }
         return DatabaseHandler.database;
     }
