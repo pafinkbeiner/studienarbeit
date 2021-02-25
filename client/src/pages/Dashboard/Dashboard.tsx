@@ -6,6 +6,7 @@ import { AMachine, Sensor, StoreModel } from '../../models/Store';
 import MachineItem from './MachineItem/MachineItem';
 import MachineChart from '../Machine/MachineTable/MachineChart';
 import { DatabaseHandler } from '../../helper/db';
+import MachineOverviewChart from '../../components/MachineOverviewChart/MachineOverviewChart';
 
 const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
 
@@ -98,11 +99,10 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
                             setSelectedSensor(selectedMachine.sensors[0])
                           }
                         }}>{">"}</IonButton>
-                        <IonButton onClick={() =>{
-                          const sensor = selectedSensor;
+                        <IonButton color="dark" style={{borderRadius: "15px"}} onClick={() =>{
                           setSelectedSensor(undefined);
-                          setSelectedSensor(sensor);
-                        }}>Refresh</IonButton>
+                          setSelectedMachine(undefined);
+                        }}>Close</IonButton>
                       </IonCol>
                     </IonRow>
                     <IonRow>
@@ -127,7 +127,26 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
                   <MachineChart values={selectedSensor.values} min={selectedSensor.min} max={selectedSensor.max}></MachineChart>
               }
             </IonCol>
-          </IonRow>
+              </IonRow>
+
+              {/* Dritte Zeile */}
+
+              <IonRow>
+              <IonCol size="12" sizeLg="6" style={{backgroundColor: "white", height: "46.5vh", marginBottom: "0.5vh"}}>
+                  {/* Column 1 - Machine Overview */}
+             
+                    <MachineOverviewChart machines={props.storeModel.machines}></MachineOverviewChart>
+              
+                </IonCol>
+                <IonCol size="12" sizeLg="6" style={{backgroundColor: "gray", height: "46.5vh", marginBottom: "0.5vh"}}>
+                  {/* Column 1 - Machine Overview */}
+                  <IonGrid>
+
+
+
+                  </IonGrid>
+                </IonCol>
+              </IonRow>
         </IonGrid>
       </IonContent>
     </IonPage>

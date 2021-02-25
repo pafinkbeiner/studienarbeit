@@ -21,6 +21,7 @@ const Settings: React.FC = () => {
 
         {/* Content */}
         <h1>{"Settings"}</h1>
+        
 
       </IonContent>
     </IonPage>

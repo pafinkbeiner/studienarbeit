@@ -18,8 +18,10 @@ const PreMain: React.FC<{storeModel:StoreModel}> = (props) => {
             <IonTitle size="large">Predictive Maintenance</IonTitle>
           </IonToolbar>
         </IonHeader>
-        {/* Content */}
-        <h1>{"Hello"}</h1>
+        
+
+    
+
 
       </IonContent>
     </IonPage>
