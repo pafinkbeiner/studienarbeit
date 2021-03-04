@@ -29,7 +29,7 @@ export class MachineInstance implements MachineTemplate{
                 name: name,
                 state: State.none,
                 machineDetails : { model: "Allrounder", serialNumber: 123456},
-                operation : { power: false, statusLED: { green: false, yellow: false, red: false, }, running: false, automatic: false },
+                operation : { power: false, statusLED: { green: false, yellow: false, red: false, }, running: false, automatic: false, oil: { level: 2000, minLevel: 0, maxLevel: 2500 } },
                 injectionUnit : { position: { max: 500, min: 0, x: 500 }, fillingLevel: { level: 0, minLevel: 0, maxLevel: 100 }},
                 savetyDoor : { position: { max: 500, min: 0, x: 500 }, locked: false },
                 lockingUnit : { locked: false, position: { max: 500, min: 0, x: 500 }, closingForce: {force: 0, maxForce: 1000, minForce: 0}},
@@ -95,7 +95,7 @@ export class MachineInstance implements MachineTemplate{
     resetToDefault() {
         this.machineData.state = State.none;
         this.machineData.machineDetails = { model: "Allrounder", serialNumber: 123456};
-        this.machineData.operation = { power: false, statusLED: { green: false, yellow: false, red: false, }, running: false, automatic: false };
+        this.machineData.operation = { power: false, statusLED: { green: false, yellow: false, red: false, }, running: false, automatic: false, oil: { level: 2000, minLevel: 0, maxLevel: 2500 } };
         this.machineData.injectionUnit = { position: { max: 500, min: 0, x: 500 }, fillingLevel: { level: 0, minLevel: 0, maxLevel: 100 }};
         this.machineData.savetyDoor = { position: { max: 500, min: 0, x: 500 }, locked: false };
         this.machineData.lockingUnit = { locked: false, position: { max: 500, min: 0, x: 500 }, closingForce: {force: 0, maxForce: 1000, minForce: 0}};
@@ -240,6 +240,9 @@ export class MachineInstance implements MachineTemplate{
 
         if(this.machineData.operation.power != true) return;
 
+        // use up 1 oil
+        this.subOil();
+
         this.executeAction(this.timerIntervall, this.accuracy, () => {});
 
 
@@ -275,6 +278,17 @@ export class MachineInstance implements MachineTemplate{
 
         await DatabaseHandler.getDbInstance().update(this.id, this);
 
+    }
+
+    async subOil() {
+        this.machineData.operation.oil.level -= 1;
+        if(this.machineData.operation.oil.level <= this.machineData.operation.oil.minLevel){
+            //refill or stop machine
+            //refill
+            this.machineData.operation.oil.level = this.machineData.operation.oil.maxLevel;
+        }
+        // Publish to mqtt broker
+        await client.publish(`machines/${this.id}/data/operation/oil/level`, JSON.stringify(this.machineData.operation.oil.level));
     }
 
     executeAction = (timerIntervall: number, accuracy: number, action: (...args: any[]) => void ) => {

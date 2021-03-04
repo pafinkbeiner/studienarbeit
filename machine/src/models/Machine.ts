@@ -16,6 +16,7 @@ export interface Machine{
         },
         running: boolean;
         automatic: boolean;
+        oil: Level;
     },    
     // Spritzeinheit
     injectionUnit: {
