@@ -1,5 +1,5 @@
 import React, { PureComponent, useEffect, useState } from 'react';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend } from 'recharts';
 import { AMachine } from '../../models/Store';
 
 // const data = [
@@ -30,8 +30,7 @@ const MachineOverviewChart: React.FC<{machines: AMachine[]}> = (props) => {
         let countActiveMachines = 0;
         let countInactiveMachines = 0;
         props.machines.map(m => {
-            console.log(m);
-            if(m.active == true){
+            if(m.active === true){
                 countActiveMachines += 1;
             }else{
                 countInactiveMachines += 1;
@@ -41,11 +40,12 @@ const MachineOverviewChart: React.FC<{machines: AMachine[]}> = (props) => {
     },[])
 
     return (
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="80%" height="80%">
+
         <PieChart>
           <Pie
             data={data}
-            cx="50%"
+            cx="60%"
             cy="50%"
             labelLine={false}
             label={renderCustomizedLabel}

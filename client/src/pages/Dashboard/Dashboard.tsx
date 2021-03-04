@@ -134,7 +134,19 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
               <IonRow>
               <IonCol size="12" sizeLg="6" style={{backgroundColor: "white", height: "46.5vh", marginBottom: "0.5vh"}}>
                   {/* Column 1 - Machine Overview */}
-             
+                    <div style={{width: "100%",justifyContent: "center", display: "flex"}}> 
+                      <p style={{color: "black"}}>Machine Overview</p>
+                    </div>
+                    <div style={{width: "100%",justifyContent: "center", display: "flex"}}> 
+                      <div style={{backgroundColor: "green", height: "10px", width: "10px", marginRight: "10px"}}></div>
+                      <p style={{color: "black", margin: "0px"}}>active</p>
+                    </div>
+
+                    <div style={{width: "100%",justifyContent: "center", display: "flex"}}> 
+                      <div style={{backgroundColor: "red", height: "10px", width: "10px", marginRight: "10px"}}></div>
+                      <p style={{color: "black", margin: "0px"}}>inactive</p>
+                    </div>
+
                     <MachineOverviewChart machines={props.storeModel.machines}></MachineOverviewChart>
               
                 </IonCol>
