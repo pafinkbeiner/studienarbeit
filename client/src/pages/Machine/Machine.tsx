@@ -161,10 +161,10 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                 </IonRow>
               </IonGrid>
             </IonCol>
-            <IonCol size="12" sizeLg="6" style={{ backgroundColor: "", height: "46.5vh", marginBottom: "0.5vh", overflowY: "scroll" }}>
+            <IonCol size="12" sizeLg="6" style={{ backgroundColor: "", height: "46.5vh", marginBottom: "0.5vh" }}>
               {/* Column 2 - Log Messages */}
               <h4>Logs</h4>
-              <IonList style={{ height: "85%" }}>
+              <IonList style={{ height: "85%",  overflowY: "scroll" }}>
                 {
                   machine && machine.logs.map((log:string, index:number) => {
                     if (log.search("[INFO]") != -1) {

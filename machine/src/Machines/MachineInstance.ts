@@ -146,6 +146,8 @@ export class MachineInstance implements MachineTemplate{
 
         if(this.machineData.operation.power != true) return;
 
+        await client.publish(`machines/${this.id}/data/operation/oil/level`, JSON.stringify(this.machineData.operation.oil.level));
+
         // Automate closing locking unit
         this.machineData.lockingUnit.position.x = this.machineData.lockingUnit.position.min;
 
@@ -169,6 +171,8 @@ export class MachineInstance implements MachineTemplate{
         await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
 
         if(this.machineData.operation.power != true) return;
+
+        await client.publish(`machines/${this.id}/data/operation/oil/level`, JSON.stringify(this.machineData.operation.oil.level));
 
         // Automate mounting Injection Unit
         this.machineData.injectionUnit.position.x = this.machineData.injectionUnit.position.min;
@@ -194,6 +198,8 @@ export class MachineInstance implements MachineTemplate{
 
         if(this.machineData.operation.power != true) return;
 
+        await client.publish(`machines/${this.id}/data/operation/oil/level`, JSON.stringify(this.machineData.operation.oil.level));
+
         // Automate mounting Injection Unit
 
         this.executeAction(this.timerIntervall, this.accuracy, async() => {
@@ -214,6 +220,8 @@ export class MachineInstance implements MachineTemplate{
         await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
 
         if(this.machineData.operation.power != true) return;
+
+        await client.publish(`machines/${this.id}/data/operation/oil/level`, JSON.stringify(this.machineData.operation.oil.level));
 
         // Automate mounting Injection Unit
         this.machineData.injectionUnit.position.x = this.machineData.injectionUnit.position.max;
@@ -254,6 +262,8 @@ export class MachineInstance implements MachineTemplate{
         await client.publish(`machines/${this.id}/data/state`, JSON.stringify(this.machineData.state))
 
         if(this.machineData.operation.power != true) return;
+
+        await client.publish(`machines/${this.id}/data/operation/oil/level`, JSON.stringify(this.machineData.operation.oil.level));
 
         // Automate closing locking unit
         this.machineData.lockingUnit.position.x = this.machineData.lockingUnit.position.max;
