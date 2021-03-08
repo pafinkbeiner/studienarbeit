@@ -1,8 +1,9 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useEffect } from 'react';
 // import { useParams } from 'react-router';
 import './Settings.css';
 import Navbar from '../../components/Navbar/Navbar';
+import axios from 'axios';
 
 const Settings: React.FC = () => {
 
@@ -21,7 +22,14 @@ const Settings: React.FC = () => {
 
         {/* Content */}
         <h1>{"Settings"}</h1>
-        
+        <IonButton onClick={() => {
+
+          axios.get("http://localhost:5002/wipe");
+          window.location.replace("/");
+
+        }}>
+          Wipe Machine Data
+        </IonButton>
 
       </IonContent>
     </IonPage>

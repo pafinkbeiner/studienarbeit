@@ -281,7 +281,7 @@ export class MachineInstance implements MachineTemplate{
     }
 
     async subOil() {
-        this.machineData.operation.oil.level -= 1;
+        this.machineData.operation.oil.level -= (Math.floor(Math.random() * 10) + 1);
         if(this.machineData.operation.oil.level <= this.machineData.operation.oil.minLevel){
             //refill or stop machine
             //refill
@@ -289,6 +289,8 @@ export class MachineInstance implements MachineTemplate{
         }
         // Publish to mqtt broker
         await client.publish(`machines/${this.id}/data/operation/oil/level`, JSON.stringify(this.machineData.operation.oil.level));
+        
+        await client.publish(`machines/${this.id}/logs`, JSON.stringify(`Oil consumed!! ${Date.now().toLocaleString()}`));
     }
 
     executeAction = (timerIntervall: number, accuracy: number, action: (...args: any[]) => void ) => {
