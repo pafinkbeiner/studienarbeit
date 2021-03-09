@@ -33,4 +33,5 @@ export interface StoreModel{
     addEs: (machineId: string, es: string) => void;
     addLog: (machineId: string, log: string) => void;
     addSensorValue: (machineId: string, sensorId: string, value: string) => void;
+    setMachineStatus: (machineId: string, active: boolean) => void;
 }

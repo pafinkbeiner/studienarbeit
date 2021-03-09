@@ -36,6 +36,7 @@ const MachineOverviewChart: React.FC<{machines: AMachine[]}> = (props) => {
                 countInactiveMachines += 1;
             }
         });
+        console.log(props.machines);
         setData([{name: 'Active', value: countActiveMachines}, {name: 'Inactive', value: countInactiveMachines}]);
     },[])
 

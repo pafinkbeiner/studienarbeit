@@ -26,7 +26,7 @@ const MachineChart = (props: {values: Array<{value: number, date: string}>, min:
       const newState: {value: number, date: string}[] = [];
       state.map(item => newState.push({
         ...item,
-        date: new Date(item.date).toTimeString().toString().slice(0, 8)
+        date: new Date(Number.parseInt(item.date)).toTimeString().toString().slice(0, 8)
       }));
       return newState;
     })

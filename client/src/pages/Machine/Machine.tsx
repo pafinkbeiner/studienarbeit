@@ -13,6 +13,7 @@ import { addOutline, addSharp, refreshOutline, refreshSharp, settingsOutline, se
 import AddEs from './AddEs/AddEs';
 import EditSensor from './EditSensor/EditSensor';
 import MachineChart from './MachineTable/MachineChart';
+import axios from "axios";
 
 
 const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
@@ -46,10 +47,6 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
     setmachine(props.storeModel.machines.find(item => item.id == id))
   })
 
-  const trigger = () => {
-    client.subscribe(`machines/+/logs`);
-  };
-
   const startMqttTransmission = () => {
     // Turn icon green
     setMqttStatus(true);
@@ -66,6 +63,9 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
     client.on(
       "message",
       (topic: string, payload: Buffer, packet: mqtt.Packet) => {
+        // set machine active if it is transmitting information
+        if (topic == `machines/${machine.name}/data/operation/running`) props.storeModel.setMachineStatus(machine.id, true);
+
         // check if topic is for log messages
         if (topic == `machines/${machine.name}/logs`) props.storeModel.addLog(machine.id, payload.toString())
 
@@ -97,6 +97,10 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
     client.removeAllListeners();
   }
 
+  const executeEs = () => {
+    axios.get(`http://localhost:5000/machines/operation/${machine.id}/stop`);
+  }
+
   return (
     <IonPage>
 
@@ -125,7 +129,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
                   <IonCol>
                     <div className="stop-container">
                       {(machine) && machine.es != "" ?
-                        <img style={{ width: "50%" }} src={redButton}></img>
+                        <img onClick={() => executeEs() } style={{ width: "50%" }} src={redButton}></img>
                         :
                         <img style={{ width: "50%" }} src={blackButton}></img>
                       }
@@ -154,7 +158,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
 
                     <IonIcon onClick={() => {
                       stopMqttTransmission();
-                      startMqttTransmission();
+                      setTimeout(() => {startMqttTransmission();}, 500)
                     }} style={{ marginLeft: "15px", marginTop: "6px" }} md={refreshOutline} ios={refreshSharp}></IonIcon>
 
                   </div>

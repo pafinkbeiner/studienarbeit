@@ -15,6 +15,9 @@ const MachineItem: React.FC<{ machine: AMachine, setSelectedMachine: (machine: A
             <img height="100px" src="https://www.arburg.com/fileadmin/redaktion/bilder/vollbild_650x320px/144999_920s.jpg" />
             <IonCardHeader>
               <IonCardTitle>{props.machine.name}</IonCardTitle>
+              { 
+                props.machine.active == true ? "(Active)" : "(Not Active)"
+              }
             </IonCardHeader>
             <IonCardContent>
                 <Link to={`Machine/${props.machine.id}`}>

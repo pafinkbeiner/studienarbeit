@@ -121,6 +121,19 @@ const App: React.FC = (props) => {
       db.override(machines);
     }
 
+    const setMachineStatus = (machineId: string, active: boolean) => {
+      setMachines( (state: AMachine[]) => {
+        let machine = state.find(m => m.id === machineId)
+        if(machine !== undefined){
+          machine.active = active;
+          return [...state.filter(m => m.id !== machineId),  machine]; 
+        }else{
+          return state;
+        }
+      })
+      db.override(machines);
+    }
+
   const StoreModel: StoreModel = {
     machines,
     loading,
@@ -132,7 +145,8 @@ const App: React.FC = (props) => {
     removeSensor,
     addEs,
     addLog,
-    addSensorValue
+    addSensorValue,
+    setMachineStatus,
 }
 
   //DEBUG

@@ -47,7 +47,7 @@ const Dashboard: React.FC<{storeModel: StoreModel}> = (props) => {
             <IonCol size="12" sizeLg="6" style={{backgroundColor: "", height: "46.5vh", marginBottom: "0.5vh"}}>
               {/* Column 1 - Machine Overview */}
               <IonGrid>
-                <IonRow>
+                <IonRow style={{ height: "45.5vh",overflowY: "scroll"}}>
                   {props.storeModel.machines && props.storeModel.machines.map(machine => {
                     return <MachineItem key={machine.id} machine={machine} setSelectedMachine={setSelectedMachine} setSelectedSensor={setSelectedSensor}/>
                   })}
