@@ -74,7 +74,7 @@ const Menu: React.FC = () => {
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
-          <IonListHeader>Condition Monitoring</IonListHeader>
+          <IonListHeader>Monitoring</IonListHeader>
           <br/>
           {appPages.map((appPage, index) => {
             return (
