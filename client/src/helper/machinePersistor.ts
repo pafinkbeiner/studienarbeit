@@ -4,14 +4,14 @@ import { AMachine } from "../models/Store";
 export class Persitor{
 
     fileWrite(data: any) {
-        axios.post(`http://localhost:5002/set/machines`, data)
+        axios.post(`${process.env.REACT_APP_DB}/set/machines`, data)
     }
       
     async fileRead(): Promise<AMachine[]> {
-        const res = await axios.get(`http://localhost:5002/get/machines`)
+        const res = await axios.get(`${process.env.REACT_APP_DB}/get/machines`)
         console.log("Result from db: ", res.data);
         if(Object.keys.length < 1){
-            axios.post("http://localhost:5002/set/machines", []);
+            axios.post(`${process.env.REACT_APP_DB}/set/machines`, []);
             return [];
         }else{
             return res.data;

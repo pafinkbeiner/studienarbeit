@@ -64,7 +64,13 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
       "message",
       (topic: string, payload: Buffer, packet: mqtt.Packet) => {
         // set machine active if it is transmitting information
-        if (topic == `machines/${machine.name}/data/operation/running`) props.storeModel.setMachineStatus(machine.id, true);
+        if (topic == `machines/${machine.name}/data/operation/running`){
+          if(payload.toString() == "true"){
+            props.storeModel.setMachineStatus(machine.id, true);
+          }else{
+            props.storeModel.setMachineStatus(machine.id, false);
+          }
+        } 
 
         // check if topic is for log messages
         if (topic == `machines/${machine.name}/logs`) props.storeModel.addLog(machine.id, payload.toString())
