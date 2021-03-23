@@ -30,13 +30,48 @@ var router = express.Router();
  * Returns data to a specific key
  */
 router.get("/", function (req, res, next) {
-    res.json("SWE-SECURITY DB");
+    var info = {
+        name: "SWE-DB",
+        routes: [
+            {
+                name: "GET",
+                route: "/get/:key",
+                method: "GET"
+            },
+            {
+                name: "SET",
+                route: "/get/:key",
+                method: "POST"
+            },
+            {
+                name: "SET",
+                route: "/set/:key/:data",
+                method: "GET"
+            },
+            {
+                name: "ALL",
+                route: "/all",
+                method: "GET"
+            },
+            {
+                name: "Delete",
+                route: "/delete/:key",
+                method: "GET"
+            },
+            {
+                name: "Wipe",
+                route: "/wipe",
+                method: "GET"
+            }
+        ]
+    };
+    res.json(info);
 });
 /*
  * GET
  * Returns data to a specific key
  */
-router.get("/get/:key", Auth_1.authMiddleware, function (req, res, next) {
+router.get("/get/:key", function (req, res, next) {
     if (req.params.key == undefined)
         res.json(Status_1.errorStatus.msg = "Key was not provided");
     res.json(Database_1.DatabaseHandler.getDbInstance().get(req.params.key));
@@ -47,12 +82,13 @@ router.get("/get/:key", Auth_1.authMiddleware, function (req, res, next) {
  * key -> req.params.key
  * data -> req.body.data
  */
-router.post("/set/:key", Auth_1.authMiddleware, function (req, res, next) {
+router.post("/set/:key", function (req, res, next) {
     if (req.params.key == undefined)
         res.json(Status_1.errorStatus.msg = "Key was not provided");
-    if (req.body.data == undefined)
+    if (req.body == undefined)
         res.json(Status_1.errorStatus.msg = "Data was not provided");
-    Database_1.DatabaseHandler.getDbInstance().set(req.params.key, req.body.data);
+    console.log("SET", req.body);
+    Database_1.DatabaseHandler.getDbInstance().set(req.params.key, req.body);
     res.json(Status_1.successStatus.msg = "Item with id " + req.params.key + " was added successfully");
 });
 /**
@@ -61,7 +97,8 @@ router.post("/set/:key", Auth_1.authMiddleware, function (req, res, next) {
  * key -> req.params.key
  * data -> req.params.data
  */
-router.get("/set/:key/:data", Auth_1.authMiddleware, function (req, res, next) {
+router.get("/set/:key/:data", function (req, res, next) {
+    console.log("Set data", req.params.data);
     if (req.params.key == undefined)
         res.json(Status_1.errorStatus.msg = "Key was not provided");
     if (req.params.data == undefined)
@@ -74,7 +111,7 @@ router.get("/set/:key/:data", Auth_1.authMiddleware, function (req, res, next) {
  * GET
  * Returns everything that is saved in the Database
  */
-router.get("/all", Auth_1.authMiddleware, function (req, res, next) {
+router.get("/all", function (req, res, next) {
     res.json(Database_1.DatabaseHandler.getDbInstance().getAll());
 });
 /**
@@ -92,7 +129,7 @@ router.get("/delete/:key", Auth_1.authMiddleware, function (req, res, next) {
  * GET
  * Wipes db
  */
-router.get("/wipe", Auth_1.authMiddleware, function (req, res, next) {
+router.get("/wipe", function (req, res, next) {
     Database_1.DatabaseHandler.getDbInstance().set("", {});
     res.json(Status_1.successStatus.msg = "Wipe was successfully");
 });

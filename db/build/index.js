@@ -9,9 +9,11 @@ var express_1 = __importDefault(require("express"));
 var path_1 = __importDefault(require("path"));
 var index_1 = __importDefault(require("./routes/index"));
 var createError = require("http-errors");
+var cors = require('cors');
 // initialize configuration
 dotenv_1.default.config();
 var app = express_1.default();
+app.use(cors());
 // port is now available to the Node.js runtime
 // as if it were an environment variable
 var port = normalizePort(process.env.SERVER_PORT || 5002);
