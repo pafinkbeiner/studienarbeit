@@ -1,5 +1,5 @@
 import mqtt from 'mqtt'
-const client = mqtt.connect(`tcp://test.mosquitto.org:8080`);
+const client = mqtt.connect(process.env.REACT_APP_MQTT || `tcp://test.mosquitto.org:8080`);
 
 const str = [
 

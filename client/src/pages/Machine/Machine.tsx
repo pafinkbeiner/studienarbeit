@@ -98,7 +98,7 @@ const Machine: React.FC<{ storeModel: StoreModel }> = (props) => {
   }
 
   const executeEs = () => {
-    axios.get(`http://localhost:5000/machines/operation/${machine.id}/stop`);
+    axios.get(`${process.env.REACT_APP_MACHINE}/machines/operation/${machine.id}/stop`);
   }
 
   return (
