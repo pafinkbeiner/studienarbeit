@@ -24,7 +24,7 @@ const Settings: React.FC = () => {
         <h1>{"Settings"}</h1>
         <IonButton onClick={() => {
 
-          axios.get("http://localhost:5002/wipe");
+          axios.get(`${process.env.REACT_APP_MACHINE}/wipe`);
           window.location.replace("/");
 
         }}>
