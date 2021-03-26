@@ -4,6 +4,7 @@ import './PreMain.css';
 import Navbar from '../../components/Navbar/Navbar';
 import { Sensor, StoreModel } from '../../models/Store';
 import MachineChart from '../Machine/MachineTable/MachineChart';
+import Algorithm from './Algorithm/Algorithm';
 
 
 const PreMain: React.FC<{storeModel:StoreModel}> = (props) => {
@@ -79,13 +80,18 @@ const PreMain: React.FC<{storeModel:StoreModel}> = (props) => {
 
 
     </IonCol>
-    <IonCol size="12" sizeLg="2" style={ selectedSensor && {backgroundColor: "#1E1E1E" , height: "46vh"}}>
+    <IonCol size="12" sizeLg="3" style={ selectedSensor && {backgroundColor: "#1E1E1E" , height: "46vh"}}>
 
         {/* Selection Box with Predictive Maintenance Algoithm */}
         {/* Component wich renders out the predictive schnittpunkt from a given sensor */}
+        {
+          (selectedSensor) && 
+            <Algorithm selectedSensor={selectedSensor}/>
+        }
+
 
     </IonCol>
-    <IonCol size="12" sizeLg="10" style={ selectedSensor && {backgroundColor: "#1E1E1E" , height: "46vh"}}>
+    <IonCol size="12" sizeLg="9" style={ selectedSensor && {backgroundColor: "#1E1E1E" , height: "46vh"}}>
       {/* Column 4 - Sensor table */}
         {
           (selectedSensor) && 
