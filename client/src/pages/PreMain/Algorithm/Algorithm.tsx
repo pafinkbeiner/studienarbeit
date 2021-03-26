@@ -4,6 +4,7 @@ import {
   IonContent,
   IonGrid,
   IonHeader,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
@@ -59,7 +60,7 @@ const Algorithm: React.FC<{ selectedSensor: Sensor }> = (props) => {
         setReachMin("N/A")
     }
 
-  }, [props, algorithm]);
+  }, [props, algorithm, depth]);
 
   const linearreg = () => {
     //basis bildet tabledata
@@ -148,6 +149,13 @@ const Algorithm: React.FC<{ selectedSensor: Sensor }> = (props) => {
             </IonSelectOption>
           </IonSelect>
         </IonItem>
+        {
+            (algorithm !== "") && 
+            <IonItem>
+                <IonLabel>Depth</IonLabel>
+                <IonInput type="number" value={depth} placeholder="Enter Number" onIonChange={e => setDepth(parseInt(e.detail.value!))}></IonInput>
+            </IonItem>
+        }
 
         <IonGrid>
           <IonRow>
