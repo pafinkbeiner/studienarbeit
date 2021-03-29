@@ -178,7 +178,6 @@ const App: React.FC = (props) => {
             <Route exact path="/Machine" render={() => <Machines storeModel={StoreModel}/>}/>
             <Route path="/Machine/:id" render={ () => <Machine storeModel={StoreModel}/> }/>
             <Route path="/PreMain" render={ () => <PreMain storeModel={StoreModel}/> }/>
-            <Route path="/Help" component={Help}/>
             <Route path="/Settings" component={Settings}/>
             <Redirect from="/" to="/Dashboard" exact />
           </IonRouterOutlet>
