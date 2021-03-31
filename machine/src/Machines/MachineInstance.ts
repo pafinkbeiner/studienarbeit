@@ -153,8 +153,8 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.lockingUnit.position.x = this.machineData.lockingUnit.position.min;
 
         await this.executeAction(this.timerIntervall, this.accuracy, async() => {
-            this.machineData.lockingUnit.closingForce.force += this.machineData.lockingUnit.closingForce.maxForce / this.accuracy;
-            if(this.machineData.lockingUnit.position.x != undefined) this.machineData.lockingUnit.position.x += this.machineData.lockingUnit.position.max / this.accuracy;
+            this.machineData.lockingUnit.closingForce.force += (this.machineData.lockingUnit.closingForce.maxForce / this.accuracy) + Math.floor(Math.random() * 3);
+            if(this.machineData.lockingUnit.position.x != undefined) this.machineData.lockingUnit.position.x += (this.machineData.lockingUnit.position.max / this.accuracy) + Math.floor(Math.random() * 3);
             try{ 
                 await client.publish(`machines/${this.id}/data/lockingUnit/closingForce/force`, JSON.stringify(this.machineData.lockingUnit.closingForce.force));
                 await client.publish(`machines/${this.id}/data/lockingUnit/position/x`, JSON.stringify(this.machineData.lockingUnit.position.x));
@@ -180,8 +180,8 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.injectionUnit.position.x = this.machineData.injectionUnit.position.min;
 
         this.executeAction(this.timerIntervall, this.accuracy, async() => {
-            this.machineData.injectionUnit.fillingLevel.level += this.machineData.injectionUnit.fillingLevel.maxLevel / this.accuracy;
-            if(this.machineData.injectionUnit.position.x != undefined) this.machineData.injectionUnit.position.x += this.machineData.injectionUnit.position.max / this.accuracy;
+            this.machineData.injectionUnit.fillingLevel.level += (this.machineData.injectionUnit.fillingLevel.maxLevel / this.accuracy) + Math.floor(Math.random() * 3);
+            if(this.machineData.injectionUnit.position.x != undefined) this.machineData.injectionUnit.position.x += (this.machineData.injectionUnit.position.max / this.accuracy) + Math.floor(Math.random() * 3);
             try{ 
                 await client.publish(`machines/${this.id}/data/injectionUnit/fillingLevel/level`, JSON.stringify(this.machineData.injectionUnit.fillingLevel.level));
                 await client.publish(`machines/${this.id}/data/injectionUnit/position/x`, JSON.stringify(this.machineData.injectionUnit.position.x));
@@ -206,7 +206,7 @@ export class MachineInstance implements MachineTemplate{
         // Automate mounting Injection Unit
 
         this.executeAction(this.timerIntervall, this.accuracy, async() => {
-            this.machineData.injectionUnit.fillingLevel.level -= this.machineData.injectionUnit.fillingLevel.maxLevel / this.accuracy;
+            this.machineData.injectionUnit.fillingLevel.level -= (this.machineData.injectionUnit.fillingLevel.maxLevel / this.accuracy) + Math.floor(Math.random() * 3);
             try{ 
                 await client.publish(`machines/${this.id}/data/injectionUnit/fillingLevel/level`, JSON.stringify(this.machineData.injectionUnit.fillingLevel.level));
             }catch(e){ this.log(`Error while performing mqtt upload in state: ${this.machineData.state}`, 2); }
@@ -231,8 +231,8 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.injectionUnit.position.x = this.machineData.injectionUnit.position.max;
 
         this.executeAction(this.timerIntervall, this.accuracy, async() => {
-            this.machineData.injectionUnit.fillingLevel.level -= this.machineData.injectionUnit.fillingLevel.maxLevel / this.accuracy;
-            if(this.machineData.injectionUnit.position.x != undefined) this.machineData.injectionUnit.position.x -= this.machineData.injectionUnit.position.max / this.accuracy;
+            this.machineData.injectionUnit.fillingLevel.level -= (this.machineData.injectionUnit.fillingLevel.maxLevel / this.accuracy ) + Math.floor(Math.random() * 3);
+            if(this.machineData.injectionUnit.position.x != undefined) this.machineData.injectionUnit.position.x -= (this.machineData.injectionUnit.position.max / this.accuracy) + Math.floor(Math.random() * 3);
             try{ 
                 await client.publish(`machines/${this.id}/data/injectionUnit/fillingLevel/level`, JSON.stringify(this.machineData.injectionUnit.fillingLevel.level));
                 await client.publish(`machines/${this.id}/data/injectionUnit/position/x`, JSON.stringify(this.machineData.injectionUnit.position.x));
@@ -274,8 +274,8 @@ export class MachineInstance implements MachineTemplate{
         this.machineData.lockingUnit.position.x = this.machineData.lockingUnit.position.max;
 
         this.executeAction(this.timerIntervall, this.accuracy, async() => {
-            this.machineData.lockingUnit.closingForce.force -= this.machineData.lockingUnit.closingForce.maxForce / this.accuracy;
-            if(this.machineData.lockingUnit.position.x != undefined) this.machineData.lockingUnit.position.x -= this.machineData.lockingUnit.position.max / this.accuracy;
+            this.machineData.lockingUnit.closingForce.force -= (this.machineData.lockingUnit.closingForce.maxForce / this.accuracy) + Math.floor(Math.random() * 3);
+            if(this.machineData.lockingUnit.position.x != undefined) this.machineData.lockingUnit.position.x -= (this.machineData.lockingUnit.position.max / this.accuracy) + Math.floor(Math.random() * 3);
             try{ 
                 await client.publish(`machines/${this.id}/data/lockingUnit/closingForce/level`, JSON.stringify(this.machineData.lockingUnit.closingForce.force));
                 await client.publish(`machines/${this.id}/data/lockingUnit/position/x`, JSON.stringify(this.machineData.lockingUnit.position.x));
