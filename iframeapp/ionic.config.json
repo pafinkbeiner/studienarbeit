@@ -1,0 +1,7 @@
+{
+  "name": "iframeapp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
